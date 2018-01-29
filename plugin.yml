@@ -1,0 +1,29 @@
+name: JDynmapGriefPrevention
+main: jahan.khan.jdynmapgriefprevention.JDynmapGriefPrevention
+version: "2.5.1"
+author: jahangir13
+website: http://goo.gl/5lI8Mh
+description: Shows Griefprevention claims and extended info on Dynmap.
+softdepend: [ dynmap, GriefPrevention ]
+
+commands:
+  jdgp:
+    description: | 
+      Shows a list of available commands
+
+permissions:
+  jdynmapgriefprevention.admin:
+    description: Gives access to all JDGP commands
+    children:
+      jdynmapgriefprevention.admin.reload: true
+      jdynmapgriefprevention.admin.disable: true
+      jdynmapgriefprevention.admin.cancel: true
+      jdynmapgriefprevention.admin.claims: true
+      jdynmapgriefprevention.admin.teleport: true
+      jdynmapgriefprevention.admin.export: true
+      jdynmapgriefprevention.player: true
+  jdynmapgriefprevention.player:
+    description: Allows execution of all player commands
+    children:
+      jdynmapgriefprevention.player.claims: true
+      jdynmapgriefprevention.player.stats: true

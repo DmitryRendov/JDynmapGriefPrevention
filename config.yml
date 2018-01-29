@@ -1,0 +1,362 @@
+#
+# JDynmap-GriefPrevention configuration v2.5.1
+#
+
+###################################################################################################
+#
+# INFO: UUID based / NAME based Server
+# Plugin checks if the server is uuid or name based.
+#
+# 1.) UUID based: Minecraft version >= 1.7.5 AND Griefprevention version >= 8.1
+# (player file names in <server>/world/playerdata/ are in format player_uuid.dat)
+# (file names in <server>/plugins/GriefpreventionData/PlayerData/ are in format player_uuid)
+#
+# 2.) NAME based: Minecraft version < 1.7.5 AND Griefprevention version < 8.1
+# (player file names in <server>/world/players/ are in format player_name.dat)
+# (file names in <server>/plugins/GriefpreventionData/PlayerData/ are in format player_name)
+#
+# Else: if neither 1 nor 2 is true the plugin will not start and terminates with console message
+#
+###################################################################################################
+
+# Plugin Metrics: true to allow the plugin to send information to Hidendra's PluginMetric system / false: to disallow
+# (https://forums.bukkit.org/threads/mcstats-plugin-metrics-r7-easy-advanced-plugin-statistics.77352/)
+# Plugin information will then show up here for the plugin developers: http://mcstats.org/plugin/JDynmapGriefPrevention
+# The information is send via an asynchronous task by the Metrics class per default...so no lag will be recognizable on 
+# the server. (Please switch that on. I am happy to see that people are using the plugin and it's important to know which
+# versions of MC/Java are used, in which ranges claim numbers are...and of course which plugin version.)
+pluginmetrics: true
+
+# Plugin update check: true: enabled / false: disabled
+# Checks once 2.5 minutes after server re/start if a new version is available on the Spigot plugin's resource page.
+# This does NOT download, install or update anything automatically! It just sends a message to console.
+# Check is done asynchronously...so if page cannot be reached the main thread does NOT hang or lag.
+updateCheck: true
+
+# Localization:
+# Plugin supports the translation of texts via copying Messages_en.properties file in the lang folder.
+# Left of the '=' signs are the keys which MUST NOT be changed. Translations can be done for everything on the 
+# right side of the '=' sign (see en/de example for how it works). 
+# Locale setting below must be the same as in the filename (e.g. locale: it | Messages_it.properties)
+# List of language codes: http://www.w3schools.com/tags/ref_language_codes.asp
+locale: en
+
+# Use Dynmap
+# Here you can switch off the use of Dynmap even if the Dynmap plugin is available.
+# Set to false to switch off. While switched off claim statistics, export functionality and teleport is still available.
+# (If the Dynmap plugin cannot be found this value is automatically set to false.)
+useDynmap: true
+
+# Options for the task periodically updating the claim information on dynmap
+update:
+  # Seconds between checks for claim updates (in seconds --> 900 = every 15 minutes)
+  # (Don't set this too low. Lower means more often claim updates and so more contribution to server lag.)
+  period: 900
+  # consolelog: log to console when update took place ( "[JDynmapGriefPrevention] Task: Claims updated" )
+  # (true: enabled / false: disabled)
+  consolelog: true
+
+# Layer options (layers that show up in Dynmap)
+layer:
+  # Use 2 layers: first: shows all used claims and second: shows unused claims (fill & border color green)
+  usetwolayers: true
+  # Name which shows up for used claims layer checkbox on dynmap
+  name: GP used Claims
+  # Name which shows up for unused claims layer checkox on dynmap
+  unusedname: GP unused Claims
+  # For used claims layer: Make layer hidden by default in dynmap (true: needs to check checkbox in dynmap first to show claims)
+  hidebydefault: false
+  # For unused claims layer: Make layer hidden by default in dynmap (true: needs to check checkbox in dynmap first to show claims)
+  hidebydefaultunused: false
+  # For used claims layer: ordering priority in layer menu (low goes before high - default is 0)
+  layerprio: 5
+  # For unused claims layer: ordering priority in layer menu (low goes before high - default is 0)
+  layerpriounused: 6
+  # (optional) set minimum zoom level before layer is visible (0 = defalt, always visible) (option for both layers)
+  minzoom: 0
+  # Show the number of claims behind the dynmap layer's label (xy) /option for both layers)
+  showcountonlayer: true
+
+# Set true to show 3D volumes for zones
+# (This is from the original plugin. I've never used or touched this code...so don't know if/how it works exactly.)
+use3dregions: false
+
+###################################################################################################
+#
+# Popup variables
+# The following variables can be used in both html-infowindows in the config file:
+#    %owneruuid% - UUID of the claim owner (does not work for admin claims or in name based servers)
+#    %owner% - Name of the claim owner
+#    %ownerdays% - Days owner is absent
+#    %cwidth% - Width of the claim
+#    %cheight% - Height of the claim
+#    %csize% - Size of the claim (width*height)
+#    %claimid% - ID of the claim
+#    %coords% - Coordinates of one claim corner
+#	 %coordx% - x coordinate of the claim corner
+#	 %coordy% - y coordinate of the claim corner
+#	 %coordz% - z coordinate of the claim corner
+#    %managers% - Comma separated list of claim sub-owners
+#    %builders% - Comma separated list of people trusted on the claim
+#    %containers% - Comma separated list of people having container trust
+#    %accessors% - Comma separated list of people having access trust
+#
+###################################################################################################
+
+# Format for popup windows - %values% will be replaced at runtime with real values 
+# (! " must not be replaced by \")
+#
+# The look of the popup window that opens clicking a claim / infowindow: user claims
+infowindow: '
+    <strong>= User Claim =</strong><br>
+    <strong>ID: </strong>%claimid%<br>
+    <strong>W</strong>:%cwidth%  <strong>H</strong>:%cheight%  <strong>S</strong>:%csize%<br>
+    /jdgp tp %coordx% %coordz%<br><br>
+
+    <strong>Main Owner</strong><br>
+    %owner% (%ownerdays%) <br><br>
+
+    <strong>Sub Owners</strong><br>
+    %managers%<br><br>
+
+    <strong>Builders</strong><br>
+    %builders%<br><br>
+
+    <strong>Containers only</strong><br>
+    %containers%<br><br>
+
+    <strong>Can enter zone</strong><br>
+    %accessors%<br>
+' # don't delete this '
+  
+# The look of the popup window that opens clicking a claim / adminclaiminfowindow: administrator claims
+admininfowindow: '
+    <strong>= Admin Claim =</strong><br>
+    <strong>ID: </strong>%claimid%<br>
+    <strong>W</strong>:%cwidth%  <strong>H</strong>:%cheight%  <strong>S</strong>:%csize%<br>
+    /tppos %coords%<br><br>
+
+    <strong>Permission Trust:</strong><br>
+    %managers%<br/><br>
+
+    <strong>Trust:</strong><br>
+    %builders%<br/><br>
+
+    <strong>Container Trust:</strong><br>
+    %containers%<br><br>
+
+    <strong>Access Trust:</strong><br>
+    %accessors%<br><br>
+' # don't delete this '
+
+#############################################################################
+#
+# Example for a popup which shows the owner skin on the left side
+# and the claim info texts on the right (using e.g. https://minotar.net)
+#
+#infowindow: '
+#<table>
+#<tr><th colspan=3 align=center><strong>= User Claim =</strong><br><br></th>
+#<tr><td rowspan=13 align=left><img src=https://minotar.net/body/%owner%/100.png></td><td rowspan=13></td><td><strong>ID: </strong>%claimid%</td></tr>
+#<tr>    <td><strong>W</strong>:%cwidth%<strong>H</strong>:%cheight%<strong>S</strong>:%csize%</td></tr>
+#<tr>    <td>/tppos %coords%<br><br></td></tr>
+#
+#<tr>    <td><strong>Main Owner</strong></td></tr>
+#<tr>    <td>%owner% (%ownerdays%)<br><br></td></tr>
+#
+#<tr>    <td><strong>Sub Owners</strong></td></tr>
+#<tr>    <td>%managers%<br><br></td></tr>
+#
+#<tr>    <td><strong>Builders</strong></td></tr>
+#<tr>    <td>%builders%<br><br></td></tr>
+#
+#<tr>    <td><strong>Containers only</strong></td></tr>
+#<tr>    <td>%containers%<br><br></td></tr>
+#
+#<tr>    <td><strong>Can enter zone</strong></td></tr>
+#<tr>    <td>%accessors%<br><br></td></tr>
+#</table>
+#' # don't delete this '
+#
+#############################################################################
+#
+# Older example...I just leave it in to show that additional html code is possible
+# Example of user popup with use of colors
+#infowindow: '
+#  <div>
+#  <div style="background-color:#D8D8D8">
+#    <span><strong>= User Claim =</strong></span><br>
+#    <span><strong>ID: </strong><span>%claimid%</span><br>
+#    <span><strong>W</strong>:%cwidth%  <strong>H</strong>:%cheight%  <strong>S</strong>:%csize%</span><br>
+#    <span>/tppos %coords%</span><br><br>
+#  </div>
+#  <div style="background-color:#B0B0B0">
+#    <span style="color:black;"><strong>Main Owner</strong></span><br>
+#    <span style="color:#CC0066">%owner% (%ownerdays%) </span><br><br>
+#  </div>
+#  <div style="background-color:#D8D8D8">
+#    <span style="color:blue;"><strong>Sub Owners</strong></span>
+#    <span>%managers%</span><br><br>
+#  </div>
+#  <div style="background-color:#B0B0B0">
+#    <span style="color:red;"><strong>Builders</strong></span><br>
+#    <span>%builders%</span><br><br>
+#  </div>
+#  <div style="background-color:#D8D8D8">
+#    <span style="color:yellow;"><strong>Containers only</strong></span><br>
+#    <span>%containers%</span><br><br>
+#  </div>
+#  <div style="background-color:#B0B0B0">
+#    <span style="color:green;"><strong>Can enter zone</strong></span><br>
+#    <span>%accessors%</span><br>
+#  </div>
+#  </div>'
+#############################################################################  
+
+# ----------------------------------------------------------
+# Example links to hex color codes which can be used:
+# List:   http://cloford.com/resources/colours/500col.htm
+# List:   http://www.color-hex.com/color-names.html
+# Picker: http://www.colorpicker.com/
+# ----------------------------------------------------------
+
+# Options for appearance of normal user claims (default: red rectangles)
+regionstyle:
+  strokeColor: '#FF0000'
+  strokeOpacity: 0.8
+  strokeWeight: 3
+  fillColor: '#FF0000'
+  fillOpacity: 0.60
+
+
+# Optional list for defining the claims to be shown. If list is non-empty, only claims matching one of the list strings are shown:
+# Values can include '<username>' (claims owned by given user), 'world:<worldid>' (all claims on a specific world),
+# '<worldid>/<username>' (claims owned by a given user on a given world). Administrator claims are owned by 'administrator'.
+# (This is from the original plugin. I've never used or touched this code...so don't know if/how it works exactly.)
+visibleregions: []
+
+
+# Optional list for restricting the claims shown. If list is non-empty, any claims matching one of the list strings are not shown:
+# Values can include '<username>' (claims owned by given user), 'world:<worldid>' (all claims on a specific world),
+# '<worldid>/<username>' (claims owned by a given user on a given world). Administrator claims are owned by 'administrator'.
+# (This is from the original plugin. I've never used or touched this code...so don't know if/how it works exactly.)
+hiddenregions: []
+
+
+# Optional per-owner overrides for regionstyle (Administrator claims are owned by 'administrator') (default: blue rectangles)
+ownerstyle:
+  administrator:
+    strokeColor: '#0000FF'
+    fillColor: '#0000FF'
+    
+###################################################################################################
+# Claim Options
+#
+# Absence day limit: how long the players can be absent until the claim shows in the absence colors defined below. After this number of days the color of the claim changes from red to 'defined below'.
+# So actually the claim shows up in (default) green color if player is absent 41 days, if 40 is set here (41 to be on the safe side and to avoid discussions).
+absenceDayLimit: 40
+
+# Color of claims of absent claim owners AND builders: the color of the claim if the owner of the claim AND all the builders did not login for more than 'absenceDayLimit' number of days.
+# (default: green fill color and green border color)
+allAbsent:
+  strokeColor: '#669900'
+  fillColor: '#669933'
+
+# Color of claims of absent owners: the color of the claims if the owner of the claim did not login for more than 'absenceDayLimit' BUT players in the claims build list (trusted) did not pass this limit yet.
+# (default: green fill color and black border color)
+ownerAbsent:
+  strokeColor: '#000000'
+  fillColor: '#669933'
+
+# Fill color for public container trusted claims (so that others can see that they are allowed to do something here).
+# enabled: true - show container public trusted claims / enabled: false - don't show container public trusted claims
+# 'public' or 'all' needs to be container trusted in that claim ('/containertrust public' or '/containertrust all')
+publicTrusted:
+  enabled: true
+  fillColor: '#9A2EFE'
+  
+# Get (W)idth, (H)eigth, (S)ize of the claims if set to true. Turn that off if you don't need it.
+# If you set this to false: delete the corresponding line from the config in infowindow AND adminclaiminfowindow.
+# Same for Claim ID and coordinates and trust lists (true: switched on / false: switched off). 
+# (This does not save much response time if switched off. But if you don't want/need the values at all you can switch these off here.)
+getOwnerUuid: false
+getClaimSize: true
+getClaimID: true
+getClaimCoords: true
+getBuilders: true
+getContainers: true
+getAccessors: true
+getManagers: true
+
+# Allow to trust a name in brackets (e.g. /trust [xyz]) to keep the claim appear as still being used.
+# I guess GriefPrevention allows this to trust Mod fake players like [BuildCraft] and so I use it for this purpose.
+# (Can be also used for e.g. admin claims to enter a reason why this admin claim is there. E.g. [MonsterFarm] or [TestBuildings])
+# true: allows and sets absent days of this builder name to 0 if one with brackets has been trusted (so claim never totally expires (green with black border)
+# false: disallows and sets absent days of this builder name to 999 (if you don't want that players do that so their claims never expire (so keep that as a secret ,) )
+allowBracketsTrust: true
+
+###################################################################################################
+# Player Map Options (dynmap layer which shows player related claims via command '/jdgp claims')
+# Player related means: all own claims and all claims the player is trusted (in any kind).
+# A player (/jdgp claims) or admin (/jdgp claims <player>) executes command and if not already used by someone else the
+# dynmap shows an additional layer (Player Map) with only claims related to the player. Dynmap web page needs to be refreshed.
+# '/jdgp claims public' can also be used to show all public trusted claims.
+#
+playerMap:
+  # The time in seconds the player layer is shown in dynmap (Should be as long as a player needs to refresh the dynmap web page 
+  # and to deselect the other GP layers. The claims will show up until the page is reloaded again...so no need to show the map any longer.)
+  mapDisplayTime: 30
+  # Use Player name for the name showing up as the Dynmap layer name?
+  # true: Show the players name as Dynmap layer name / false: dynmap layer name is a static name (configured below)
+  mapUsePlayerName: true
+  # Static layer name to show (only if mapUsePlayerName = false)
+  mapLayerName: GP Player Map
+  # Hide (uncheck) the other JDGP layers on dynmap so player claims can be seen after next browser refresh
+  mapHideOtherLayers: true
+
+###################################################################################################
+# News Window: this marker is set to the first layer at coordinates which can be defined here.
+# This popup is intended to write some news directly to the dynmap so that players visiting the dynmap
+# can see if something has been changed. A round/circular marker will be shown. The popup contains the
+# newswindow text.
+# Go to your dynmap and get the coordinates of a free area where you want to place the news-window (at a
+# place where others can see it).
+#
+newswindow: '
+    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v2.4 =</strong></span><br>
+    <br><hr><br>
+    (2015-04-04):<br>
+    New Command <span style="color:#AA0000"><strong>"/jdgp claims"</strong></span> : <br><br>
+    Shows your own claims and claims you have been trusted.<br><br>
+    A new dynmap-layer is created which only shows the relevant claims.<br>
+    The layer will stay for 30 seconds.<br>
+    Refresh your browser within this time!<br><br>
+    Only 1 player at a time can use this layer.<br>
+    <span style="color:#AA0000"><strong>If locked wait a minute and try again.</strong></span><br><br>
+    "/jdgp claims &lt;name&gt;" for claims of specific player (extra permission needed)<br>
+    <br><hr><br>
+' # don't delete this '
+
+# Styles of the news-window can be changed here
+newswindowstyle:
+  # true: show newsinfo marker / false: don't show newswindow marker
+  enabled: true
+  # center coordinates of circle marker
+  coordinates:
+    x: -2600
+    z: -1300
+  # radius of circle marker
+  radius: 100
+  strokeColor: '#FFCC33'
+  strokeOpacity: 0.8
+  strokeWeight: 10
+  fillColor: '#FFFF33'
+  fillOpacity: 0.80
+    
+#--------------------------------------------------------------------------------------------------
+# Test Options (used for development - but can be switched on/off)
+#
+# Print some debug output to console (time measurements within update claim function) - true: output info / false: don't output info
+# (Switch it on once just to see your times for all the specific steps (async/sync) depending on your OfflinePlayer/Claims numbers)
+debug: false
+#--------------------------------------------------------------------------------------------------
