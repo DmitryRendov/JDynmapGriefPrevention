@@ -100,7 +100,7 @@ public class CSVFile
             
             UUID uuidowner = hci.ownerUuid;
             String uuid;
-            String uuid; if (uuidowner == null) {
+            if (uuidowner == null) {
               uuid = "null";
             } else {
               uuid = uuidowner.toString();

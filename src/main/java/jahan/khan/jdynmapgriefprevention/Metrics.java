@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 import java.net.Proxy;
 import java.net.URL;
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -31,56 +33,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 public class Metrics
@@ -160,13 +112,9 @@ public class Metrics
     if (name == null) {
       throw new IllegalArgumentException("Graph name cannot be null");
     }
-    
 
-    Graph graph = new Graph(name, null);
-    
-
+    Graph graph = new Graph(name);
     this.graphs.add(graph);
-    
 
     return graph;
   }
@@ -443,10 +391,6 @@ public class Metrics
     
 
     URL url = new URL("http://report.mcstats.org" + String.format("/plugin/%s", new Object[] { urlEncode(pluginName) }));
-    
-
-    URLConnection connection;
-    
     URLConnection connection;
     
     if (isMineshafterPresent()) {
@@ -496,110 +440,75 @@ public class Metrics
       throw new IOException(response);
     }
     
-    if ((response.equals("1")) || (response.contains("This is your first update this hour"))) {
+    /*if ((response.equals("1")) || (response.contains("This is your first update this hour"))) {
       synchronized (this.graphs) {
         Iterator<Graph> iter = this.graphs.iterator();
         Iterator localIterator2;
-        for (; iter.hasNext(); 
-            
-
-            localIterator2.hasNext())
+        for (; iter.hasNext(); localIterator2.hasNext())
         {
           Graph graph = (Graph)iter.next();
-          
-          localIterator2 = graph.getPlotters().iterator(); continue;Plotter plotter = (Plotter)localIterator2.next();
+          localIterator2 = graph.getPlotters().iterator(); 
+          continue;
+          Plotter plotter = (Plotter)localIterator2.next();
           plotter.reset();
         }
       }
+    }*/
+
+    if ((response.equals("1")) || (response.contains("This is your first update this hour"))) {
+      synchronized (this.graphs)
+      {
+        Iterator<Graph> iter = this.graphs.iterator();
+        Iterator localIterator2;
+        for (; iter.hasNext(); localIterator2.hasNext())
+        {
+          Graph graph = (Graph)iter.next();
+          
+          localIterator2 = graph.getPlotters().iterator(); 
+          Plotter plotter = (Plotter)localIterator2.next();
+          plotter.reset();
+          continue;
+        }
+      }
     }
+
+
   }
   
-  /* Error */
   public static byte[] gzip(String input)
   {
-    // Byte code:
-    //   0: new 598	java/io/ByteArrayOutputStream
-    //   3: dup
-    //   4: invokespecial 600	java/io/ByteArrayOutputStream:<init>	()V
-    //   7: astore_1
-    //   8: aconst_null
-    //   9: astore_2
-    //   10: new 601	java/util/zip/GZIPOutputStream
-    //   13: dup
-    //   14: aload_1
-    //   15: invokespecial 603	java/util/zip/GZIPOutputStream:<init>	(Ljava/io/OutputStream;)V
-    //   18: astore_2
-    //   19: aload_2
-    //   20: aload_0
-    //   21: ldc_w 606
-    //   24: invokevirtual 608	java/lang/String:getBytes	(Ljava/lang/String;)[B
-    //   27: invokevirtual 610	java/util/zip/GZIPOutputStream:write	([B)V
-    //   30: goto +42 -> 72
-    //   33: astore_3
-    //   34: aload_3
-    //   35: invokevirtual 611	java/io/IOException:printStackTrace	()V
-    //   38: aload_2
-    //   39: ifnull +46 -> 85
-    //   42: aload_2
-    //   43: invokevirtual 614	java/util/zip/GZIPOutputStream:close	()V
-    //   46: goto +39 -> 85
-    //   49: astore 5
-    //   51: goto +34 -> 85
-    //   54: astore 4
-    //   56: aload_2
-    //   57: ifnull +12 -> 69
-    //   60: aload_2
-    //   61: invokevirtual 614	java/util/zip/GZIPOutputStream:close	()V
-    //   64: goto +5 -> 69
-    //   67: astore 5
-    //   69: aload 4
-    //   71: athrow
-    //   72: aload_2
-    //   73: ifnull +12 -> 85
-    //   76: aload_2
-    //   77: invokevirtual 614	java/util/zip/GZIPOutputStream:close	()V
-    //   80: goto +5 -> 85
-    //   83: astore 5
-    //   85: aload_1
-    //   86: invokevirtual 615	java/io/ByteArrayOutputStream:toByteArray	()[B
-    //   89: areturn
-    // Line number table:
-    //   Java source line #522	-> byte code offset #0
-    //   Java source line #523	-> byte code offset #8
-    //   Java source line #526	-> byte code offset #10
-    //   Java source line #527	-> byte code offset #19
-    //   Java source line #528	-> byte code offset #30
-    //   Java source line #529	-> byte code offset #34
-    //   Java source line #531	-> byte code offset #38
-    //   Java source line #532	-> byte code offset #42
-    //   Java source line #533	-> byte code offset #46
-    //   Java source line #530	-> byte code offset #54
-    //   Java source line #531	-> byte code offset #56
-    //   Java source line #532	-> byte code offset #60
-    //   Java source line #533	-> byte code offset #64
-    //   Java source line #535	-> byte code offset #69
-    //   Java source line #531	-> byte code offset #72
-    //   Java source line #532	-> byte code offset #76
-    //   Java source line #533	-> byte code offset #80
-    //   Java source line #537	-> byte code offset #85
-    // Local variable table:
-    //   start	length	slot	name	signature
-    //   0	90	0	input	String
-    //   7	79	1	baos	java.io.ByteArrayOutputStream
-    //   9	68	2	gzos	java.util.zip.GZIPOutputStream
-    //   33	2	3	e	IOException
-    //   54	16	4	localObject	Object
-    //   49	1	5	localIOException1	IOException
-    //   67	1	5	localIOException2	IOException
-    //   83	1	5	localIOException3	IOException
-    // Exception table:
-    //   from	to	target	type
-    //   10	30	33	java/io/IOException
-    //   42	46	49	java/io/IOException
-    //   10	38	54	finally
-    //   60	64	67	java/io/IOException
-    //   76	80	83	java/io/IOException
-  }
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    GZIPOutputStream gzos = null;
+    try
+    {
+      gzos = new GZIPOutputStream(baos);
+      gzos.write(input.getBytes("UTF-8"));
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+      if (gzos != null) {
+        try
+        {
+          gzos.close();
+        }
+        catch (IOException localIOException1) {}
+      }
+    }
+    finally
+    {
+      if (gzos != null) {
+        try
+        {
+          gzos.close();
+        }
+        catch (IOException localIOException2) {}
+      }
+    }
+    return baos.toByteArray();
+  }  
+  
+  
   
   private boolean isMineshafterPresent()
   {

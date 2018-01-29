@@ -22,6 +22,8 @@ public class UTF8Control
     String resourceName = toResourceName(bundleName, "properties");
     ResourceBundle bundle = null;
     InputStream stream = null;
+    URLConnection connection;
+    
     if (reload) {
       URL url = loader.getResource(resourceName);
       if (url != null) {

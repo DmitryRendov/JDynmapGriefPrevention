@@ -24,12 +24,12 @@ public class UpdateCheck
   private final JavaPlugin plugin;
   private static final String KEY = "98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4";
   private static final String REQUEST_METHOD = "POST";
-  private String rESOURCE_ID = "";
+  private String RESOURCE_ID = "";
   
   private static final String HOST = "http://www.spigotmc.org";
   
   private static final String QUERY = "/api/general.php";
-  private String wRITE_STRING;
+  private String WRITE_STRING;
   private String version;
   private String oldVersion;
   private UpdateResult result = UpdateResult.DISABLED;
@@ -45,8 +45,8 @@ public class UpdateCheck
     UPDATE_AVAILABLE;
   }
   
-  public UpdateCheck(JavaPlugin plugin, Integer resourceId, boolean disabled) {
-    this.rESOURCE_ID = resourceId;
+  public UpdateCheck(JavaPlugin plugin, String resourceId, boolean disabled) {
+    this.RESOURCE_ID = resourceId;
     this.plugin = plugin;
     this.oldVersion = this.plugin.getDescription().getVersion();
     
@@ -62,7 +62,7 @@ public class UpdateCheck
       return;
     }
     
-    this.wRITE_STRING = ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + this.rESOURCE_ID);
+    this.WRITE_STRING = ("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + this.RESOURCE_ID);
     run();
   }
   
@@ -70,7 +70,7 @@ public class UpdateCheck
     this.connection.setDoOutput(true);
     try {
       this.connection.setRequestMethod("POST");
-      this.connection.getOutputStream().write(this.wRITE_STRING.getBytes("UTF-8"));
+      this.connection.getOutputStream().write(this.WRITE_STRING.getBytes("UTF-8"));
     } catch (ProtocolException e1) {
       this.result = UpdateResult.FAIL_SPIGOT;
     } catch (UnsupportedEncodingException e) {

@@ -1234,11 +1234,11 @@ public class JDynmapGriefPrevention
       for (int i = 0; i < this.sz; i++) {
         Claim claim = (Claim)claims.get(i);
         if ((claim.children != null) && (claim.children.size() > 0)) {
-          for (int j = 0; j < claim.children.size(); j++) {
+          for (int l = 0; l < claim.children.size(); l++) {
             if (this.uuidserver.booleanValue()) {
-              handleClaimUuid(this.idx, (Claim)claim.children.get(j));
+              handleClaimUuid(this.idx, (Claim)claim.children.get(l));
             } else {
-              handleClaimName(this.idx, (Claim)claim.children.get(j));
+              handleClaimName(this.idx, (Claim)claim.children.get(l));
             }
             this.idx += 1;
           }
@@ -1263,7 +1263,7 @@ public class JDynmapGriefPrevention
 
           Map<String, AreaMarker> newmap = new HashMap(JDynmapGriefPrevention.this.idx + 1, 1.0F);
           if (JDynmapGriefPrevention.this.useDynmap) {
-            newmap = JDynmapGriefPrevention.this.[97;66;29MupdateClaimsMap();
+            newmap = JDynmapGriefPrevention.this.updateClaimsMap();
           }
           
           if (JDynmapGriefPrevention.this.debug) {
@@ -1330,7 +1330,7 @@ public class JDynmapGriefPrevention
       System.out.println("JDGP: --------------------------------");
     }
     
-    BukkitTask task = new GriefPreventionUpdate(null).runTaskLaterAsynchronously(this, this.updperiod);
+    BukkitTask task = new GriefPreventionUpdate().runTaskLaterAsynchronously(this, this.updperiod);
     taskid = task.getTaskId();
   }
   
@@ -1617,7 +1617,7 @@ public class JDynmapGriefPrevention
     stop = false;
     
 
-    new GriefPreventionUpdate(null).runTaskLaterAsynchronously(this, 40L);
+    new GriefPreventionUpdate().runTaskLaterAsynchronously(this, 40L);
     
     if (!reload)
     {
@@ -1837,7 +1837,7 @@ public class JDynmapGriefPrevention
   private void checkForUpdate()
   {
     console(jdgpMessages.getString("updater.checkmsg"));
-    UpdateCheck updatechecker = new UpdateCheck(this, Integer.valueOf(818), false);
+    UpdateCheck updatechecker = new UpdateCheck(this, "818", false);
     UpdateCheck.UpdateResult checkresult = updatechecker.getResult();
     switch (checkresult)
     {
@@ -2205,7 +2205,7 @@ public class JDynmapGriefPrevention
             JDynmapGriefPrevention.mapPlayerAlreadyRunning = false;
             
             JDynmapGriefPrevention.text = MessageFormat.format(JDynmapGriefPrevention.jdgpMessages.getString("command.claims.ok3"), new Object[] { String.valueOf(JDynmapGriefPrevention.mapDisplayTime) });
-            this.val$msender.sendMessage(JDynmapGriefPrevention.text);
+            msender.sendMessage(JDynmapGriefPrevention.text);
           }
         }.runTaskLaterAsynchronously(JDynmapGriefPrevention.this.plugin, JDynmapGriefPrevention.mapDisplayTime * 20L);
       } }.runTaskLaterAsynchronously(this, 0L);
