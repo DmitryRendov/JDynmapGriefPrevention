@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jahan.khan</groupId>
-    <artifactId>GPFlags</artifactId>
+    <groupId>jahan.khan.jdynmapgriefprevention</groupId>
+    <artifactId>JDynmapGriefPrevention</artifactId>
     <version>3.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
@@ -31,7 +31,7 @@
             <systemPath>${project.basedir}/lib/GriefPrevention.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>dynmap</groupId>
+            <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
             <version>2.1</version>
         </dependency>  
@@ -46,6 +46,10 @@
         <repository>
             <id>spigot</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>dynmap-repo</id>
+            <url>http://repo.mikeprimm.com/</url>
         </repository>
     </repositories>
 

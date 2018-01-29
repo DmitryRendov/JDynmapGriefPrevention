@@ -1,6 +1,6 @@
 name: JDynmapGriefPrevention
 main: jahan.khan.jdynmapgriefprevention.JDynmapGriefPrevention
-version: "2.5.1"
+version: "3.0.0"
 author: jahangir13
 website: http://goo.gl/5lI8Mh
 description: Shows Griefprevention claims and extended info on Dynmap.

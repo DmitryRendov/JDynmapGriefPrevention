@@ -1263,7 +1263,7 @@ public class JDynmapGriefPrevention
 
           Map<String, AreaMarker> newmap = new HashMap(JDynmapGriefPrevention.this.idx + 1, 1.0F);
           if (JDynmapGriefPrevention.this.useDynmap) {
-            newmap = JDynmapGriefPrevention.this.updateClaimsMap();
+            newmap = JDynmapGriefPrevention.this.[97;66;29MupdateClaimsMap();
           }
           
           if (JDynmapGriefPrevention.this.debug) {
