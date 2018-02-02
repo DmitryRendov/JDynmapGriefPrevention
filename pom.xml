@@ -4,11 +4,12 @@
 
     <groupId>jahan.khan.jdynmapgriefprevention</groupId>
     <artifactId>JDynmapGriefPrevention</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0-OSS</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
     <description>JDynmapGriefPrevention.</description>
     <url>https://github.com/DmitryRendov/JDynmapGriefPrevention</url>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,8 +34,8 @@
         <dependency>
             <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
-            <version>2.1</version>
-        </dependency>  
+            <version>2.5</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -61,10 +62,7 @@
         <resources>
             <resource>
                 <filtering>true</filtering>
-                <directory>${project.basedir}</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
         <plugins>
@@ -73,10 +71,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
-        </plugins>    
+        </plugins>
     </build>
 </project>
