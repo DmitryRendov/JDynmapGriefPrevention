@@ -1,6 +1,10 @@
 package jahan.khan.jdynmapgriefprevention;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -1485,137 +1489,44 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 		return null;
 	}
 
-	/* Error */
-	private void copy(String fileFromJar, String outfile) {
-		// Byte code:
-		// 0: ldc 1
-		// 2: invokevirtual 1367 java/lang/Class:getClassLoader
-		// ()Ljava/lang/ClassLoader;
-		// 5: aload_1
-		// 6: invokevirtual 1371 java/lang/ClassLoader:getResourceAsStream
-		// (Ljava/lang/String;)Ljava/io/InputStream;
-		// 9: astore_3
-		// 10: aconst_null
-		// 11: astore 4
-		// 13: new 1377 java/io/FileOutputStream
-		// 16: dup
-		// 17: aload_2
-		// 18: invokespecial 1379 java/io/FileOutputStream:<init> (Ljava/lang/String;)V
-		// 21: astore 4
-		// 23: sipush 2048
-		// 26: newarray <illegal type>
-		// 28: astore 5
-		// 30: aload_3
-		// 31: aload 5
-		// 33: invokevirtual 1380 java/io/InputStream:read ([B)I
-		// 36: istore 6
-		// 38: goto +21 -> 59
-		// 41: aload 4
-		// 43: aload 5
-		// 45: iconst_0
-		// 46: iload 6
-		// 48: invokevirtual 1386 java/io/FileOutputStream:write ([BII)V
-		// 51: aload_3
-		// 52: aload 5
-		// 54: invokevirtual 1380 java/io/InputStream:read ([B)I
-		// 57: istore 6
-		// 59: iload 6
-		// 61: iconst_m1
-		// 62: if_icmpne -21 -> 41
-		// 65: goto +61 -> 126
-		// 68: astore 5
-		// 70: aload 4
-		// 72: ifnull +13 -> 85
-		// 75: aload 4
-		// 77: invokevirtual 1390 java/io/FileOutputStream:close ()V
-		// 80: goto +5 -> 85
-		// 83: astore 8
-		// 85: aload_3
-		// 86: invokevirtual 1393 java/io/InputStream:close ()V
-		// 89: goto +61 -> 150
-		// 92: astore 8
-		// 94: goto +56 -> 150
-		// 97: astore 7
-		// 99: aload 4
-		// 101: ifnull +13 -> 114
-		// 104: aload 4
-		// 106: invokevirtual 1390 java/io/FileOutputStream:close ()V
-		// 109: goto +5 -> 114
-		// 112: astore 8
-		// 114: aload_3
-		// 115: invokevirtual 1393 java/io/InputStream:close ()V
-		// 118: goto +5 -> 123
-		// 121: astore 8
-		// 123: aload 7
-		// 125: athrow
-		// 126: aload 4
-		// 128: ifnull +13 -> 141
-		// 131: aload 4
-		// 133: invokevirtual 1390 java/io/FileOutputStream:close ()V
-		// 136: goto +5 -> 141
-		// 139: astore 8
-		// 141: aload_3
-		// 142: invokevirtual 1393 java/io/InputStream:close ()V
-		// 145: goto +5 -> 150
-		// 148: astore 8
-		// 150: return
-		// Line number table:
-		// Java source line #1684 -> byte code offset #0
-		// Java source line #1685 -> byte code offset #10
-		// Java source line #1687 -> byte code offset #13
-		// Java source line #1688 -> byte code offset #23
-		// Java source line #1689 -> byte code offset #30
-		// Java source line #1690 -> byte code offset #38
-		// Java source line #1691 -> byte code offset #41
-		// Java source line #1692 -> byte code offset #51
-		// Java source line #1690 -> byte code offset #59
-		// Java source line #1694 -> byte code offset #65
-		// Java source line #1696 -> byte code offset #70
-		// Java source line #1698 -> byte code offset #75
-		// Java source line #1699 -> byte code offset #80
-		// Java source line #1702 -> byte code offset #85
-		// Java source line #1703 -> byte code offset #89
-		// Java source line #1695 -> byte code offset #97
-		// Java source line #1696 -> byte code offset #99
-		// Java source line #1698 -> byte code offset #104
-		// Java source line #1699 -> byte code offset #109
-		// Java source line #1702 -> byte code offset #114
-		// Java source line #1703 -> byte code offset #118
-		// Java source line #1704 -> byte code offset #123
-		// Java source line #1696 -> byte code offset #126
-		// Java source line #1698 -> byte code offset #131
-		// Java source line #1699 -> byte code offset #136
-		// Java source line #1702 -> byte code offset #141
-		// Java source line #1703 -> byte code offset #145
-		// Java source line #1705 -> byte code offset #150
-		// Local variable table:
-		// start length slot name signature
-		// 0 151 0 this JDynmapGriefPrevention
-		// 0 151 1 fileFromJar String
-		// 0 151 2 outfile String
-		// 9 133 3 inStream java.io.InputStream
-		// 11 121 4 fos java.io.FileOutputStream
-		// 28 25 5 buf byte[]
-		// 68 1 5 localIOException java.io.IOException
-		// 36 24 6 r int
-		// 97 27 7 localObject Object
-		// 83 1 8 localException Exception
-		// 92 1 8 localException1 Exception
-		// 112 1 8 localException2 Exception
-		// 121 1 8 localException3 Exception
-		// 139 1 8 localException4 Exception
-		// 148 1 8 localException5 Exception
-		// Exception table:
-		// from to target type
-		// 13 65 68 java/io/IOException
-		// 75 80 83 java/lang/Exception
-		// 85 89 92 java/lang/Exception
-		// 13 70 97 finally
-		// 104 109 112 java/lang/Exception
-		// 114 118 121 java/lang/Exception
-		// 131 136 139 java/lang/Exception
-		// 141 145 148 java/lang/Exception
-	}
+  private void copy(String fileFromJar, String outfile)
+  {
+    InputStream inStream = JDynmapGriefPrevention.class.getClassLoader().getResourceAsStream(fileFromJar);
+    FileOutputStream fos = null;
+    try {
+      fos = new FileOutputStream(outfile);
+      byte[] buf = new byte['?'];
+      int r = inStream.read(buf);
+      while (r != -1) {
+        fos.write(buf, 0, r);
+        r = inStream.read(buf);
+      }
+    }
+    catch (IOException localIOException) {
+      if (fos != null) {
+        try {
+          fos.close();
+        } catch (Exception localException) {}
+      }
+      try {
+        inStream.close();
+      }
+      catch (Exception localException1) {}
+    }
+    finally
+    {
+      if (fos != null) {
+        try {
+          fos.close();
+        } catch (Exception localException2) {}
+      }
+      try {
+        inStream.close();
+      }
+      catch (Exception localException3) {}
+    }
+  }
+
 
 	public Metrics getMetrics() {
 		return this.metrics;
