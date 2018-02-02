@@ -1,5 +1,5 @@
 #
-# JDynmap-GriefPrevention configuration v3.0.0
+# JDynmap-GriefPrevention configuration v3.0.0-OSS
 #
 
 ###################################################################################################
@@ -323,10 +323,10 @@ playerMap:
 # place where others can see it).
 #
 newswindow: '
-    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v2.4 =</strong></span><br>
+    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v3.0.0-OSS =</strong></span><br>
     <br><hr><br>
-    (2015-04-04):<br>
-    New Command <span style="color:#AA0000"><strong>"/jdgp claims"</strong></span> : <br><br>
+    (2018-02-02):<br>
+    3.x version is OSS <br><br>
     Shows your own claims and claims you have been trusted.<br><br>
     A new dynmap-layer is created which only shows the relevant claims.<br>
     The layer will stay for 30 seconds.<br>
