@@ -61,7 +61,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 	protected String versionString = "";
 	protected Metrics metrics;
 	protected JavaPlugin plugin;
-	private static String pluginVersion = "2.5.1";
+	private static String pluginVersion = "3.0.0";
 	private static String pluginAuthor = "jahangir13";
 
 	private static String checkedPluginVersion;
