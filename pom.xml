@@ -4,7 +4,7 @@
 
     <groupId>jahan.khan.jdynmapgriefprevention</groupId>
     <artifactId>JDynmapGriefPrevention</artifactId>
-    <version>3.0.0-OSS-SNAPSHOT</version>
+    <version>3.0.0-OSS</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
     <description>JDynmapGriefPrevention.</description>
