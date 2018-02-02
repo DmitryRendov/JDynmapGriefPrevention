@@ -65,7 +65,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 	protected String versionString = "";
 	protected Metrics metrics;
 	protected JavaPlugin plugin;
-	private static String pluginVersion = "3.0.0";
+	private static String pluginVersion = "3.0.0-OSS";
 	private static String pluginAuthors = "jahangir13,WaterDemon";
 
 	private static String checkedPluginVersion;
@@ -405,8 +405,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 		stringContainers = "";
 		stringAccessors = "";
 		stringManagers = "";
-		uuidowner = null;
-
 		uuidowner = claim.ownerID;
 
 		if ((uuidowner == null) && (claim.parent != null)) {
@@ -1233,12 +1231,24 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		try {
 			File langFile = null;
 			langFile = new File(getDataFolder() + "/lang/", "Messages_de.properties");
 			if (!langFile.exists()) {
 				langFile.getParentFile().mkdirs();
 				copy("lang/Messages_de.properties", getDataFolder() + "/lang/" + "Messages_de.properties");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			File langFile = null;
+			langFile = new File(getDataFolder() + "/lang/", "Messages_ru.properties");
+			if (!langFile.exists()) {
+				langFile.getParentFile().mkdirs();
+				copy("lang/Messages_ru.properties", getDataFolder() + "/lang/" + "Messages_ru.properties");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
