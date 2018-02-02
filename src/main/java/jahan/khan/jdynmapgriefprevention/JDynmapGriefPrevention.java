@@ -66,7 +66,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 	protected Metrics metrics;
 	protected JavaPlugin plugin;
 	private static String pluginVersion = "3.0.0";
-	private static String pluginAuthor = "jahangir13";
+	private static String pluginAuthors = "jahangir13,WaterDemon";
 
 	private static String checkedPluginVersion;
 	private static final String DEF_INFOWINDOW = "div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
@@ -1489,44 +1489,41 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 		return null;
 	}
 
-  private void copy(String fileFromJar, String outfile)
-  {
-    InputStream inStream = JDynmapGriefPrevention.class.getClassLoader().getResourceAsStream(fileFromJar);
-    FileOutputStream fos = null;
-    try {
-      fos = new FileOutputStream(outfile);
-      byte[] buf = new byte['?'];
-      int r = inStream.read(buf);
-      while (r != -1) {
-        fos.write(buf, 0, r);
-        r = inStream.read(buf);
-      }
-    }
-    catch (IOException localIOException) {
-      if (fos != null) {
-        try {
-          fos.close();
-        } catch (Exception localException) {}
-      }
-      try {
-        inStream.close();
-      }
-      catch (Exception localException1) {}
-    }
-    finally
-    {
-      if (fos != null) {
-        try {
-          fos.close();
-        } catch (Exception localException2) {}
-      }
-      try {
-        inStream.close();
-      }
-      catch (Exception localException3) {}
-    }
-  }
-
+	private void copy(String fileFromJar, String outfile) {
+		InputStream inStream = JDynmapGriefPrevention.class.getClassLoader().getResourceAsStream(fileFromJar);
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(outfile);
+			byte[] buf = new byte['?'];
+			int r = inStream.read(buf);
+			while (r != -1) {
+				fos.write(buf, 0, r);
+				r = inStream.read(buf);
+			}
+		} catch (IOException localIOException) {
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (Exception localException) {
+				}
+			}
+			try {
+				inStream.close();
+			} catch (Exception localException1) {
+			}
+		} finally {
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (Exception localException2) {
+				}
+			}
+			try {
+				inStream.close();
+			} catch (Exception localException3) {
+			}
+		}
+	}
 
 	public Metrics getMetrics() {
 		return this.metrics;
@@ -1876,7 +1873,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 		if (cmd.getName().equalsIgnoreCase("jdgp")) {
 			if (args.length == 0) {
 				text = MessageFormat.format(jdgpMessages.getString("command.help.title"),
-						new Object[] { pluginVersion }) + " (by " + pluginAuthor + ")";
+						new Object[] { pluginVersion }) + " (by " + pluginAuthors + ")";
 				sender.sendMessage(text);
 				if (sender.hasPermission("jdynmapgriefprevention.admin.reload")) {
 					sender.sendMessage(jdgpMessages.getString("command.help.reload"));
