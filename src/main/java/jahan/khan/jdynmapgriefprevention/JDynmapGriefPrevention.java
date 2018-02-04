@@ -2,12 +2,9 @@ package jahan.khan.jdynmapgriefprevention;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.MessageFormat;
@@ -18,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
@@ -32,27 +28,31 @@ import me.ryanhamshire.GriefPrevention.Visualization;
 import me.ryanhamshire.GriefPrevention.VisualizationType;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
+
+import java.io.PrintStream;
+import java.net.URI;
+import java.util.Map.Entry;
+import org.bukkit.Server;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfigurationOptions;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class JDynmapGriefPrevention extends JavaPlugin {
     private static Plugin dynmap;
@@ -66,15 +66,17 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     protected String versionString = "";
     protected Metrics metrics;
     protected JavaPlugin plugin;
-    private static String pluginVersion = "3.0.0-OSS";
+    private static String pluginVersion = "3.1.0-OSS";
     private static String pluginAuthors = "jahangir13,DmitryRendov1";
 
     private static String checkedPluginVersion;
-    private static final String DEF_INFOWINDOW = "div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
+    private static final String DEF_INFOWINDOW = "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
     private static final String DEF_ADMININFOWINDOW = "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
+    private static final String DEF_NEWSWINDOW = "= JDynmapGriefPrevention News =";
+    private static String infowindowTmpl;
+    private static String admininfowindowTmpl;
+    private static String newswindowTmpl;
     private static final String ADMIN_ID = "administrator";
-    private static String infowindow = "div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
-    private static String admininfowindow = "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
     private static AreaStyle defstyle;
     private static Map<String, AreaStyle> ownerstyle;
     private static HashMap<String, OfflinePlayer> hm_offlinePlayers;
@@ -95,7 +97,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     protected boolean mapHideOtherLayers = true;
 
     private static CircleMarker newsmarker = null;
-    private static String newswindow = "";
     protected boolean nwsEnabled = true;
     private static int nwsCoordsX = 0;
     private static int nwsCoordsZ = 0;
@@ -221,7 +222,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
     }
 
-    public void console(String msg) {
+    //adds a server log entry
+    private void console(String msg) {
         getServer().getConsoleSender().sendMessage("[JDynmapGriefPrevention] " + msg);
     }
 
@@ -238,13 +240,32 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
     }
 
+    private String getLocalizedInfoWindow(String infowindow) {
+        infowindow = infowindow.replace("%userclaimi18%", jdgpMessages.getString("config.infowindow.userclaim"));
+        infowindow = infowindow.replace("%owneri18%", jdgpMessages.getString("config.infowindow.owner"));
+        infowindow = infowindow.replace("%subownersi18%", jdgpMessages.getString("config.infowindow.subowners"));
+        infowindow = infowindow.replace("%buildersi18%", jdgpMessages.getString("config.infowindow.builders"));
+        infowindow = infowindow.replace("%containersonlyi18%", jdgpMessages.getString("config.infowindow.containersonly"));
+        infowindow = infowindow.replace("%canenteri18%", jdgpMessages.getString("config.infowindow.canenter"));
+        return infowindow;
+    }
+
+    private String getLocalizedAdminInfoWindow(String admininfowindow) {
+        admininfowindow = admininfowindow.replace("%adminclaimi18%", jdgpMessages.getString("config.admininfowindow.adminclaim"));
+        admininfowindow = admininfowindow.replace("%permissiontrusti18%", jdgpMessages.getString("config.admininfowindow.permissiontrust"));
+        admininfowindow = admininfowindow.replace("%trusti18%", jdgpMessages.getString("config.admininfowindow.trust"));
+        admininfowindow = admininfowindow.replace("%containertrusti18%", jdgpMessages.getString("config.admininfowindow.containertrust"));
+        admininfowindow = admininfowindow.replace("%accesstrusti18%", jdgpMessages.getString("config.admininfowindow.accesstrust"));
+        return admininfowindow;
+    }
+
     private String formatInfoWindow(Claim claim, AreaMarker m) {
         String v = "";
 
         if (claim.isAdminClaim()) {
-            v = "<div class=\"regioninfo\">" + admininfowindow + "</div>";
+            v = "<div class=\"regioninfo\">" + this.getLocalizedAdminInfoWindow(admininfowindowTmpl) + "</div>";
         } else {
-            v = "<div class=\"regioninfo\">" + infowindow + "</div>";
+            v = "<div class=\"regioninfo\">" + this.getLocalizedInfoWindow(infowindowTmpl) + "</div>";
         }
 
         if (this.getOwnerUuid) {
@@ -1156,7 +1177,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                                     Integer.parseInt(JDynmapGriefPrevention.nwsStrokeColor.substring(1), 16));
                             JDynmapGriefPrevention.newsmarker.setFillStyle(JDynmapGriefPrevention.nwsFillOpacity,
                                     Integer.parseInt(JDynmapGriefPrevention.nwsFillColor.substring(1), 16));
-                            JDynmapGriefPrevention.newsmarker.setDescription(JDynmapGriefPrevention.newswindow);
+                            JDynmapGriefPrevention.newsmarker.setDescription(JDynmapGriefPrevention.newswindowTmpl);
                         }
                     } catch (Exception localException) {
                     }
@@ -1177,8 +1198,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     System.out.println("JDGP: ---------------------------------------------");
                 }
                 if (JDynmapGriefPrevention.this.updconslog) {
-                    JDynmapGriefPrevention.this
-                            .console(JDynmapGriefPrevention.jdgpMessages.getString("jdgp.claims.upd.log"));
+                    JDynmapGriefPrevention.this.console(JDynmapGriefPrevention.jdgpMessages.getString("jdgp.claims.upd.log"));
                     JDynmapGriefPrevention.reloadwait = false;
                 }
             }
@@ -1584,14 +1604,10 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         cfg = getConfig();
 
         cfg.options().copyDefaults(true);
-
         this.use3d = cfg.getBoolean("use3dregions", false);
-        infowindow = cfg.getString("infowindow",
-                "div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>");
-        admininfowindow = cfg.getString("admininfowindow",
-                "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>");
-        newswindow = cfg.getString("newswindow",
-                "div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>");
+        infowindowTmpl = cfg.getString("infowindow", DEF_INFOWINDOW);
+        admininfowindowTmpl = cfg.getString("admininfowindow", DEF_ADMININFOWINDOW);
+        newswindowTmpl = cfg.getString("newswindow", DEF_NEWSWINDOW);
         this.per = cfg.getInt("update.period", 300);
         layerUsedName = cfg.getString(layerUsedName, "GP used Claims");
         layerUnusedName = cfg.getString(layerUnusedName, "GP unused Claims");
@@ -1629,7 +1645,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         this.mapUsePlayerName = cfg.getBoolean("playerMap.mapUsePlayerName", true);
         mapLayerName = cfg.getString("playerMap.mapLayerName", "GP Player Map");
         this.mapHideOtherLayers = cfg.getBoolean("playerMap.mapHideOtherLayers", true);
-        newswindow = cfg.getString("newswindow", "= JDynmapGriefPrevention News =");
         this.nwsEnabled = cfg.getBoolean("newswindowstyle.enabled", true);
         nwsCoordsX = cfg.getInt("newswindowstyle.coordinates.x", 64536);
         nwsCoordsZ = cfg.getInt("newswindowstyle.coordinates.z", 64536);

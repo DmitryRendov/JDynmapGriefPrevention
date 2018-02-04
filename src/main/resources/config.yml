@@ -107,46 +107,46 @@ use3dregions: false
 # (! " must not be replaced by \")
 #
 # The look of the popup window that opens clicking a claim / infowindow: user claims
-infowindow: '
-    <strong>= User Claim =</strong><br>
+infowindow: '<div class="infowindow">
+    <strong>= %userclaimi18% =</strong><br>
     <strong>ID: </strong>%claimid%<br>
     <strong>W</strong>:%cwidth%  <strong>H</strong>:%cheight%  <strong>S</strong>:%csize%<br>
     /jdgp tp %coordx% %coordz%<br><br>
 
-    <strong>Main Owner</strong><br>
+    <strong>%owneri18%:</strong><br>
     %owner% (%ownerdays%) <br><br>
 
-    <strong>Sub Owners</strong><br>
+    <strong>%subownersi18%:</strong><br>
     %managers%<br><br>
 
-    <strong>Builders</strong><br>
+    <strong>%buildersi18%:</strong><br>
     %builders%<br><br>
 
-    <strong>Containers only</strong><br>
+    <strong>%containersonlyi18%:</strong><br>
     %containers%<br><br>
 
-    <strong>Can enter zone</strong><br>
-    %accessors%<br>
+    <strong>%canenteri18%:</strong><br>
+    %accessors%<br></div>
 ' # don't delete this '
   
 # The look of the popup window that opens clicking a claim / adminclaiminfowindow: administrator claims
-admininfowindow: '
-    <strong>= Admin Claim =</strong><br>
+admininfowindow: '<div class="infowindow">
+    <strong>= %adminclaimi18% =</strong><br>
     <strong>ID: </strong>%claimid%<br>
     <strong>W</strong>:%cwidth%  <strong>H</strong>:%cheight%  <strong>S</strong>:%csize%<br>
     /tppos %coords%<br><br>
 
-    <strong>Permission Trust:</strong><br>
+    <strong>%permissiontrusti18%:</strong><br>
     %managers%<br/><br>
 
-    <strong>Trust:</strong><br>
+    <strong>%trusti18%:</strong><br>
     %builders%<br/><br>
 
-    <strong>Container Trust:</strong><br>
+    <strong>%containertrusti18%:</strong><br>
     %containers%<br><br>
 
-    <strong>Access Trust:</strong><br>
-    %accessors%<br><br>
+    <strong>%accesstrusti18%:</strong><br>
+    %accessors%<br><br></div>
 ' # don't delete this '
 
 #############################################################################

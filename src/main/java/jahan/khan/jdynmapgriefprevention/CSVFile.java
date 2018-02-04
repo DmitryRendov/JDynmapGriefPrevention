@@ -2,21 +2,17 @@ package jahan.khan.jdynmapgriefprevention;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 import me.ryanhamshire.GriefPrevention.Claim;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class CSVFile {
     final org.bukkit.plugin.java.JavaPlugin plugin;
     private JDynmapGriefPrevention jdgp;
     CommandSender sender;
-    String claims_filename;
-    String stats_filename;
+    private String claims_filename;
+    private String stats_filename;
     final String delim = "|";
 
     public CSVFile(JDynmapGriefPrevention plugin, CommandSender sender) {
@@ -80,7 +76,7 @@ public class CSVFile {
                     writer.append("Managers(Permission Trust)");
                     writer.append('\n');
 
-                    ClaimInfo hci = null;
+                    ClaimInfo hci;
 
                     for (int i = 0; i < JDynmapGriefPrevention.claimsInfo.size(); i++) {
                         hci = (ClaimInfo) JDynmapGriefPrevention.claimsInfo.get(i);
