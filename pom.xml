@@ -4,7 +4,7 @@
 
     <groupId>jahan.khan.jdynmapgriefprevention</groupId>
     <artifactId>JDynmapGriefPrevention</artifactId>
-    <version>3.0.0-OSS</version>
+    <version>3.1.0-OSS-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
     <description>JDynmapGriefPrevention.</description>
@@ -39,7 +39,7 @@
     </dependencies>
 
     <repositories>
-      <!-- Spigot -->
+        <!-- Spigot -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
