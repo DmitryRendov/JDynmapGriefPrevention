@@ -60,14 +60,10 @@ update:
 layer:
   # Use 2 layers: first: shows all used claims and second: shows unused claims (fill & border color green)
   usetwolayers: true
-  # Name which shows up for used claims layer checkbox on dynmap
-  name: GP used Claims
-  # Name which shows up for unused claims layer checkox on dynmap
-  unusedname: GP unused Claims
   # For used claims layer: Make layer hidden by default in dynmap (true: needs to check checkbox in dynmap first to show claims)
-  hidebydefault: false
+  hidebydefault: true
   # For unused claims layer: Make layer hidden by default in dynmap (true: needs to check checkbox in dynmap first to show claims)
-  hidebydefaultunused: false
+  hidebydefaultunused: true
   # For used claims layer: ordering priority in layer menu (low goes before high - default is 0)
   layerprio: 5
   # For unused claims layer: ordering priority in layer menu (low goes before high - default is 0)
@@ -259,14 +255,14 @@ absenceDayLimit: 40
 # Color of claims of absent claim owners AND builders: the color of the claim if the owner of the claim AND all the builders did not login for more than 'absenceDayLimit' number of days.
 # (default: green fill color and green border color)
 allAbsent:
-  strokeColor: '#669900'
-  fillColor: '#669933'
+  strokeColor: '#000000'
+  fillColor: '#9C9C9C'
 
 # Color of claims of absent owners: the color of the claims if the owner of the claim did not login for more than 'absenceDayLimit' BUT players in the claims build list (trusted) did not pass this limit yet.
 # (default: green fill color and black border color)
 ownerAbsent:
-  strokeColor: '#000000'
-  fillColor: '#669933'
+  strokeColor: '#303030'
+  fillColor: '#9C9C9C'
 
 # Fill color for public container trusted claims (so that others can see that they are allowed to do something here).
 # enabled: true - show container public trusted claims / enabled: false - don't show container public trusted claims

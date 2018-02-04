@@ -117,8 +117,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static boolean claimUsed = false;
     private static UUID uuidowner = null;
     private static String claimID = "";
-    private static String layerUsedName = "GP used Claims";
-    private static String layerUnusedName = "GP unused Claims";
     private static String oowner = "n/a";
     private static int ownerdays = 0;
     private static int cwidth = 0;
@@ -240,7 +238,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
     }
 
-    private String getLocalizedInfoWindow(String infowindow) {
+    private String getInfoWindowI18(String infowindow) {
         infowindow = infowindow.replace("%userclaimi18%", jdgpMessages.getString("config.infowindow.userclaim"));
         infowindow = infowindow.replace("%owneri18%", jdgpMessages.getString("config.infowindow.owner"));
         infowindow = infowindow.replace("%subownersi18%", jdgpMessages.getString("config.infowindow.subowners"));
@@ -250,7 +248,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         return infowindow;
     }
 
-    private String getLocalizedAdminInfoWindow(String admininfowindow) {
+    private String getAdminInfoWindowI18(String admininfowindow) {
         admininfowindow = admininfowindow.replace("%adminclaimi18%", jdgpMessages.getString("config.admininfowindow.adminclaim"));
         admininfowindow = admininfowindow.replace("%permissiontrusti18%", jdgpMessages.getString("config.admininfowindow.permissiontrust"));
         admininfowindow = admininfowindow.replace("%trusti18%", jdgpMessages.getString("config.admininfowindow.trust"));
@@ -263,9 +261,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         String v = "";
 
         if (claim.isAdminClaim()) {
-            v = "<div class=\"regioninfo\">" + this.getLocalizedAdminInfoWindow(admininfowindowTmpl) + "</div>";
+            v = "<div class=\"regioninfo\">" + this.getAdminInfoWindowI18(admininfowindowTmpl) + "</div>";
         } else {
-            v = "<div class=\"regioninfo\">" + this.getLocalizedInfoWindow(infowindowTmpl) + "</div>";
+            v = "<div class=\"regioninfo\">" + this.getInfoWindowI18(infowindowTmpl) + "</div>";
         }
 
         if (this.getOwnerUuid) {
@@ -1184,9 +1182,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
                     if ((JDynmapGriefPrevention.this.useDynmap) && (JDynmapGriefPrevention.this.showcountonlayer)
                             && (JDynmapGriefPrevention.this.usetwolayers)) {
-                        JDynmapGriefPrevention.set.setMarkerSetLabel(JDynmapGriefPrevention.layerUsedName + " ("
+                        JDynmapGriefPrevention.set.setMarkerSetLabel(jdgpMessages.getString("config.claims.usedname") + " ("
                                 + JDynmapGriefPrevention.this.countused + ")");
-                        JDynmapGriefPrevention.setunused.setMarkerSetLabel(JDynmapGriefPrevention.layerUnusedName + " ("
+                        JDynmapGriefPrevention.setunused.setMarkerSetLabel(jdgpMessages.getString("config.claims.unusedname") + " ("
                                 + JDynmapGriefPrevention.this.countunused + ")");
                     }
                 }
@@ -1408,9 +1406,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         if ((dynmap != null) && (this.useDynmap)) {
             set = markerapi.getMarkerSet("griefprevention.markerset");
             if (set == null) {
-                set = markerapi.createMarkerSet("griefprevention.markerset", layerUsedName, null, false);
+                set = markerapi.createMarkerSet("griefprevention.markerset", jdgpMessages.getString("config.claims.name"), null, false);
             } else
-                set.setMarkerSetLabel(layerUsedName);
+                set.setMarkerSetLabel(jdgpMessages.getString("config.claims.name"));
             if (set == null) {
                 console(jdgpMessages.getString("enable.dyn.marker.create"));
                 getServer().getPluginManager().disablePlugin(this);
@@ -1424,9 +1422,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             if (this.usetwolayers) {
                 setunused = markerapi.getMarkerSet("griefprevention2.markerset");
                 if (setunused == null) {
-                    setunused = markerapi.createMarkerSet("griefprevention2.markerset", layerUnusedName, null, false);
+                    setunused = markerapi.createMarkerSet("griefprevention2.markerset", jdgpMessages.getString("config.claims.unusedname"), null, false);
                 } else
-                    setunused.setMarkerSetLabel(layerUnusedName);
+                    setunused.setMarkerSetLabel(jdgpMessages.getString("config.claims.unusedname"));
                 if (setunused == null) {
                     console(jdgpMessages.getString("enable.dyn.marker.create"));
                     return;
@@ -1609,8 +1607,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         admininfowindowTmpl = cfg.getString("admininfowindow", DEF_ADMININFOWINDOW);
         newswindowTmpl = cfg.getString("newswindow", DEF_NEWSWINDOW);
         this.per = cfg.getInt("update.period", 300);
-        layerUsedName = cfg.getString(layerUsedName, "GP used Claims");
-        layerUnusedName = cfg.getString(layerUnusedName, "GP unused Claims");
         this.updconslog = cfg.getBoolean("update.consolelog", true);
         absenceDayLimit = cfg.getInt("absenceDayLimit", 40);
         allAbsentStrokeColor = cfg.getString("allAbsent.strokeColor", "#669900");
@@ -1630,8 +1626,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         this.allowBracketsTrust = cfg.getBoolean("allowBracketsTrust", true);
         this.showcountonlayer = cfg.getBoolean("layer.showcountonlayer", true);
         this.usetwolayers = cfg.getBoolean("layer.usetwolayers", true);
-        layerUsedName = cfg.getString("layer.name", "GP used Claims");
-        layerUnusedName = cfg.getString("layer.unusedname", "GP used Claims");
         layerPrio = cfg.getInt("layer.layerprio");
         layerPrioUnused = cfg.getInt("layer.layerpriounused");
         hideByDefault = cfg.getBoolean("layer.hidebydefault", false);
