@@ -152,11 +152,11 @@ public class CSVFile {
                         writer.append("|");
                         writer.append(publictrust.toString());
                         writer.append("|");
-                        writer.append("/jdgp tp " + claimID);
+                        writer.append("/jdgp tp ").append(claimID);
                         writer.append("|");
-                        writer.append("/jdgp tp " + coordx + " " + coordz);
+                        writer.append("/jdgp tp ").append(coordx).append(" ").append(coordz);
                         writer.append("|");
-                        writer.append("/tppos " + coordx + " " + coordy + " " + coordz);
+                        writer.append("/tppos ").append(coordx).append(" ").append(coordy).append(" ").append(coordz);
                         writer.append("|");
                         writer.append(stringBuilders);
                         writer.append("|");

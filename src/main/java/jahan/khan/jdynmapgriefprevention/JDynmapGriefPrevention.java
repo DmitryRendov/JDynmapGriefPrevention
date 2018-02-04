@@ -395,15 +395,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         if (l0 == null) {
             return;
         }
-        String wname = l0.getWorld().getName();
-
-        if (wname.startsWith("world_myst")) {
-            int i = wname.indexOf("age");
-            i += 3;
-            String agenumber = wname.substring(i, wname.length());
-            wname = wname.replace('/', '-');
-            wname = wname + "_" + agenumber;
-        }
 
         long lastLogin = 0L;
         oowner = "somebody";
@@ -645,15 +636,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         Location l1 = claim.getGreaterBoundaryCorner();
         if (l0 == null) {
             return;
-        }
-        String wname = l0.getWorld().getName();
-
-        if (wname.startsWith("world_myst")) {
-            int i = wname.indexOf("age");
-            i += 3;
-            String agenumber = wname.substring(i, wname.length());
-            wname = wname.replace('/', '-');
-            wname = wname + "_" + agenumber;
         }
 
         long lastLogin = 0L;
@@ -1060,7 +1042,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             if (this.uuidserver.booleanValue()) {
                 hm_offlinePlayers.put(op.getUniqueId().toString(), op);
             } else {
-                hm_offlinePlayers.put(op.getName().toString().toLowerCase(), op);
+                hm_offlinePlayers.put(op.getName().toLowerCase(), op);
             }
         }
         if (this.debug) {

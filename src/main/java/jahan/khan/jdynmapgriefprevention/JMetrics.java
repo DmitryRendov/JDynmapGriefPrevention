@@ -1,5 +1,6 @@
 package jahan.khan.jdynmapgriefprevention;
 
+
 public class JMetrics {
     private JDynmapGriefPrevention jdgp;
 
