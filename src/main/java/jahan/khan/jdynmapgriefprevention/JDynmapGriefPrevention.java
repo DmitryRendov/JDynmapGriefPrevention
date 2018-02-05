@@ -46,14 +46,6 @@ import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 
-import java.io.PrintStream;
-import java.net.URI;
-import java.util.Map.Entry;
-import org.bukkit.Server;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfigurationOptions;
-import org.bukkit.scheduler.BukkitScheduler;
-
 public class JDynmapGriefPrevention extends JavaPlugin {
     private static Plugin dynmap;
     private static DynmapAPI api;
@@ -391,10 +383,11 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
     private void handleClaimUuid(int index, Claim claim) {
         Location l0 = claim.getLesserBoundaryCorner();
-        Location l1 = claim.getGreaterBoundaryCorner();
         if (l0 == null) {
             return;
         }
+        Location l1 = claim.getGreaterBoundaryCorner();
+        String wname = l0.getWorld().getName();
 
         long lastLogin = 0L;
         oowner = "somebody";
@@ -633,10 +626,11 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
     private void handleClaimName(int index, Claim claim) {
         Location l0 = claim.getLesserBoundaryCorner();
-        Location l1 = claim.getGreaterBoundaryCorner();
         if (l0 == null) {
             return;
         }
+        Location l1 = claim.getGreaterBoundaryCorner();
+        String wname = l0.getWorld().getName();
 
         long lastLogin = 0L;
         oowner = "somebody";

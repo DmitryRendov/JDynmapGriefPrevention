@@ -3,7 +3,6 @@ package jahan.khan.jdynmapgriefprevention;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
-
 import me.ryanhamshire.GriefPrevention.Claim;
 import org.bukkit.command.CommandSender;
 
