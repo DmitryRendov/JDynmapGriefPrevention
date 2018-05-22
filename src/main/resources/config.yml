@@ -1,5 +1,5 @@
 #
-# JDynmap-GriefPrevention configuration v3.0.0-OSS
+# JDynmap-GriefPrevention configuration v3.1.0-OSS
 #
 
 ###################################################################################################
@@ -31,7 +31,7 @@ pluginmetrics: true
 # Checks once 2.5 minutes after server re/start if a new version is available on the Spigot plugin's resource page.
 # This does NOT download, install or update anything automatically! It just sends a message to console.
 # Check is done asynchronously...so if page cannot be reached the main thread does NOT hang or lag.
-updateCheck: true
+updateCheck: false
 
 # Localization:
 # Plugin supports the translation of texts via copying Messages_en.properties file in the lang folder.
@@ -249,17 +249,17 @@ ownerstyle:
 # Claim Options
 #
 # Absence day limit: how long the players can be absent until the claim shows in the absence colors defined below. After this number of days the color of the claim changes from red to 'defined below'.
-# So actually the claim shows up in (default) green color if player is absent 41 days, if 40 is set here (41 to be on the safe side and to avoid discussions).
+# So actually the claim shows up in (default) grey color if player is absent 41 days, if 40 is set here (41 to be on the safe side and to avoid discussions).
 absenceDayLimit: 40
 
 # Color of claims of absent claim owners AND builders: the color of the claim if the owner of the claim AND all the builders did not login for more than 'absenceDayLimit' number of days.
-# (default: green fill color and green border color)
+# (default: grey fill color and black border color)
 allAbsent:
   strokeColor: '#000000'
   fillColor: '#9C9C9C'
 
 # Color of claims of absent owners: the color of the claims if the owner of the claim did not login for more than 'absenceDayLimit' BUT players in the claims build list (trusted) did not pass this limit yet.
-# (default: green fill color and black border color)
+# (default: grey fill color and dark grey border color)
 ownerAbsent:
   strokeColor: '#303030'
   fillColor: '#9C9C9C'
@@ -319,9 +319,9 @@ playerMap:
 # place where others can see it).
 #
 newswindow: '
-    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v3.0.0-OSS =</strong></span><br>
+    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v3.1.0-OSS =</strong></span><br>
     <br><hr><br>
-    (2018-02-02):<br>
+    (2018-05-01):<br>
     3.x version is OSS <br><br>
     Shows your own claims and claims you have been trusted.<br><br>
     A new dynmap-layer is created which only shows the relevant claims.<br>
@@ -336,7 +336,7 @@ newswindow: '
 # Styles of the news-window can be changed here
 newswindowstyle:
   # true: show newsinfo marker / false: don't show newswindow marker
-  enabled: true
+  enabled: false
   # center coordinates of circle marker
   coordinates:
     x: -2600

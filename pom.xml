@@ -31,6 +31,14 @@
             <systemPath>${project.basedir}/lib/GriefPrevention.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>me.ryanhamshire</groupId>
+            <artifactId>GPFlags</artifactId>
+            <version>4.5.3-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/GriefPreventionFlags.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
             <version>2.5</version>

@@ -1,31 +1,6 @@
 package jahan.khan.jdynmapgriefprevention;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
-
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.DataStore;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import me.ryanhamshire.GriefPrevention.Visualization;
-import me.ryanhamshire.GriefPrevention.VisualizationType;
+import me.ryanhamshire.GriefPrevention.*;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -46,7 +21,26 @@ import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+
 public class JDynmapGriefPrevention extends JavaPlugin {
+    private static final String DEF_INFOWINDOW = "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
+    private static final String DEF_ADMININFOWINDOW = "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
+    private static final String DEF_NEWSWINDOW = "= JDynmapGriefPrevention News =";
+    private static final String ADMIN_ID = "administrator";
+    protected static ResourceBundle jdgpMessages;
+    protected static volatile ArrayList<ClaimInfo> claimsInfo;
+    protected static int absenceDayLimit = 40;
     private static Plugin dynmap;
     private static DynmapAPI api;
     private static MarkerAPI markerapi;
@@ -54,21 +48,12 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static MarkerSet set;
     private static MarkerSet setunused;
     private static MarkerSet playerset;
-    protected Boolean uuidserver = null;
-    protected String versionString = "";
-    protected Metrics metrics;
-    protected JavaPlugin plugin;
     private static String pluginVersion = "3.1.0-OSS";
-    private static String pluginAuthors = "jahangir13,DmitryRendov1";
-
+    private static String pluginAuthors = "jahangir13,DmitryRendov";
     private static String checkedPluginVersion;
-    private static final String DEF_INFOWINDOW = "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
-    private static final String DEF_ADMININFOWINDOW = "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
-    private static final String DEF_NEWSWINDOW = "= JDynmapGriefPrevention News =";
     private static String infowindowTmpl;
     private static String admininfowindowTmpl;
     private static String newswindowTmpl;
-    private static final String ADMIN_ID = "administrator";
     private static AreaStyle defstyle;
     private static Map<String, AreaStyle> ownerstyle;
     private static HashMap<String, OfflinePlayer> hm_offlinePlayers;
@@ -80,16 +65,11 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static boolean stop;
     private static volatile Map<String, AreaMarker> resareas = new HashMap(1000, 0.75F);
     private static volatile Map<String, AreaMarker> presareas = new HashMap(50, 0.75F);
-
     private static volatile boolean mapPlayerAlreadyRunning = false;
     private static String mapPlayerName = "";
     private static int mapDisplayTime = 30;
-    protected boolean mapUsePlayerName = true;
     private static String mapLayerName = "GP Player Map";
-    protected boolean mapHideOtherLayers = true;
-
     private static CircleMarker newsmarker = null;
-    protected boolean nwsEnabled = true;
     private static int nwsCoordsX = 0;
     private static int nwsCoordsZ = 0;
     private static int nwsRadius = 100;
@@ -98,14 +78,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static int nwsStrokeWeight = 10;
     private static String nwsFillColor;
     private static double nwsFillOpacity = 0.8D;
-
     private static Locale jdgpLocale;
     private static String text = "";
-
-    protected static ResourceBundle jdgpMessages;
-    protected static volatile ArrayList<ClaimInfo> claimsInfo;
-    protected volatile int sz = 0;
-    protected volatile int idx = 0;
     private static boolean claimUsed = false;
     private static UUID uuidowner = null;
     private static String claimID = "";
@@ -123,44 +97,22 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static String coordy = "";
     private static String coordz = "";
     private static boolean playerLongAgo = false;
-
     private static FileConfiguration cfg;
-    boolean use3d = false;
-    boolean useDynmap = true;
     private static boolean publictrust = false;
-    protected static int absenceDayLimit = 40;
     private static String allAbsentStrokeColor;
     private static String allAbsentFillColor;
     private static String ownerAbsentStrokeColor;
     private static String ownerAbsentFillColor;
     private static String publicFillColor;
-    protected boolean publicenabled = true;
-    protected boolean allowBracketsTrust = true;
-    protected String cfglocale = "en";
-    protected boolean updconslog = true;
-    protected boolean showcountonlayer = true;
-    protected boolean usetwolayers = true;
     private static int layerPrio = 0;
     private static int layerPrioUnused = 0;
     private static boolean hideByDefaultUnused = false;
     private static boolean hideByDefault = false;
     private static boolean reload = false;
     private static volatile boolean reloadwait = false;
-    protected boolean pluginMetrics = true;
-    protected boolean updateCheck = true;
     private static volatile boolean taskRunning = false;
-    protected boolean debug = false;
     private static boolean userDisable = false;
-    protected boolean getOwnerUuid = false;
-    protected boolean getClaimSize = true;
-    protected boolean getClaimID = true;
-    protected boolean getClaimCoords = true;
-    protected boolean getBuilders = true;
-    protected boolean getContainers = true;
-    protected boolean getAccessors = true;
-    protected boolean getManagers = true;
     private static int taskid = -1;
-
     private static long startTimeUC = 0L;
     private static long startTime = 0L;
     private static long estimatedTime = 0L;
@@ -172,7 +124,32 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static long estimatedTimeUC = 0L;
     private static long startTimeUCMAP = 0L;
     private static long estimatedTimeUCMAP = 0L;
-
+    protected Boolean uuidserver = null;
+    protected String versionString = "";
+    protected Metrics metrics;
+    protected JavaPlugin plugin;
+    protected boolean mapUsePlayerName = true;
+    protected boolean mapHideOtherLayers = true;
+    protected boolean nwsEnabled = true;
+    protected volatile int sz = 0;
+    protected volatile int idx = 0;
+    protected boolean publicenabled = true;
+    protected boolean allowBracketsTrust = true;
+    protected String cfglocale = "en";
+    protected boolean updconslog = true;
+    protected boolean showcountonlayer = true;
+    protected boolean usetwolayers = true;
+    protected boolean pluginMetrics = true;
+    protected boolean updateCheck = true;
+    protected boolean debug = false;
+    protected boolean getOwnerUuid = false;
+    protected boolean getClaimSize = true;
+    protected boolean getClaimID = true;
+    protected boolean getClaimCoords = true;
+    protected boolean getBuilders = true;
+    protected boolean getContainers = true;
+    protected boolean getAccessors = true;
+    protected boolean getManagers = true;
     protected int countadmin = 0;
     protected int countbuilder = 0;
     protected int countused = 0;
@@ -184,50 +161,21 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     protected int numContainers = 0;
     protected int numAccessors = 0;
     protected int numManagers = 0;
+    boolean use3d = false;
+    boolean useDynmap = true;
 
-    private static class AreaStyle {
-        String strokecolor;
-
-        double strokeopacity;
-        int strokeweight;
-        String fillcolor;
-        double fillopacity;
-        String label;
-
-        AreaStyle(FileConfiguration cfg, String path, AreaStyle def) {
-            this.strokecolor = cfg.getString(path + ".strokeColor", def.strokecolor);
-            this.strokeopacity = cfg.getDouble(path + ".strokeOpacity", def.strokeopacity);
-            this.strokeweight = cfg.getInt(path + ".strokeWeight", def.strokeweight);
-            this.fillcolor = cfg.getString(path + ".fillColor", def.fillcolor);
-            this.fillopacity = cfg.getDouble(path + ".fillOpacity", def.fillopacity);
-            this.label = cfg.getString(path + ".label", null);
+    public static boolean isStringNumber(String string) {
+        try {
+            Long.parseLong(string);
+        } catch (Exception e) {
+            return false;
         }
-
-        AreaStyle(FileConfiguration cfg, String path) {
-            this.strokecolor = cfg.getString(path + ".strokeColor", "#FF0000");
-            this.strokeopacity = cfg.getDouble(path + ".strokeOpacity", 0.8D);
-            this.strokeweight = cfg.getInt(path + ".strokeWeight", 3);
-            this.fillcolor = cfg.getString(path + ".fillColor", "#FF0000");
-            this.fillopacity = cfg.getDouble(path + ".fillOpacity", 0.35D);
-        }
+        return true;
     }
 
     //adds a server log entry
     private void console(String msg) {
         getServer().getConsoleSender().sendMessage("[JDynmapGriefPrevention] " + msg);
-    }
-
-    private class GriefPreventionUpdate extends BukkitRunnable {
-        private GriefPreventionUpdate() {
-        }
-
-        public void run() {
-            if (!JDynmapGriefPrevention.stop) {
-                JDynmapGriefPrevention.taskRunning = true;
-                JDynmapGriefPrevention.this.updateClaims();
-                JDynmapGriefPrevention.taskRunning = false;
-            }
-        }
     }
 
     private String getInfoWindowI18(String infowindow) {
@@ -250,7 +198,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     }
 
     private String formatInfoWindow(Claim claim, AreaMarker m) {
-        String v = "";
+        String v;
 
         if (claim.isAdminClaim()) {
             v = "<div class=\"regioninfo\">" + this.getAdminInfoWindowI18(admininfowindowTmpl) + "</div>";
@@ -322,7 +270,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         return true;
     }
 
-    private void addStyle(String owner, String worldid, AreaMarker m, Claim claim, boolean isPlayerMapClaim) {
+    private void addStyle(String owner, String worldId, AreaMarker m, Claim claim, boolean isPlayerMapClaim) {
         AreaStyle as = null;
         int sc = 0;
         int fc = 0;
@@ -1291,7 +1239,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         VersionComparator cmp = new VersionComparator();
 
         int mcresult = cmp.compare("1.7.5", mcVersion);
-
         int gpresult = cmp.compare("8.1", gpVersion);
 
         if ((mcresult == 1) && (gpresult == 1)) {
@@ -1342,20 +1289,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
             setLocale();
             if (dynmap != null) {
-                if (set != null) {
-                    set.deleteMarkerSet();
-                    set = null;
-                }
-
-                if (setunused != null) {
-                    setunused.deleteMarkerSet();
-                    setunused = null;
-                }
-
-                if (playerset != null) {
-                    playerset.deleteMarkerSet();
-                    playerset = null;
-                }
+                deleteMarkerSet();
             }
 
             resareas.clear();
@@ -1446,21 +1380,27 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         reload = false;
     }
 
-    @Override
-    public void onDisable() {
-        console(jdgpMessages.getString("jdgp.disabled"));
+    private void deleteMarkerSet() {
         if (set != null) {
             set.deleteMarkerSet();
             set = null;
         }
+
         if (setunused != null) {
             setunused.deleteMarkerSet();
             setunused = null;
         }
+
         if (playerset != null) {
             playerset.deleteMarkerSet();
             playerset = null;
         }
+    }
+
+    @Override
+    public void onDisable() {
+        console(jdgpMessages.getString("jdgp.disabled"));
+        deleteMarkerSet();
         resareas.clear();
         stop = true;
 
@@ -1858,15 +1798,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         return false;
     }
 
-    public static boolean isStringNumber(String string) {
-        try {
-            Long.parseLong(string);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("jdgp")) {
             if (args.length == 0) {
@@ -2103,5 +2034,45 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
 
         return false;
+    }
+
+    private static class AreaStyle {
+        String strokecolor;
+
+        double strokeopacity;
+        int strokeweight;
+        String fillcolor;
+        double fillopacity;
+        String label;
+
+        AreaStyle(FileConfiguration cfg, String path, AreaStyle def) {
+            this.strokecolor = cfg.getString(path + ".strokeColor", def.strokecolor);
+            this.strokeopacity = cfg.getDouble(path + ".strokeOpacity", def.strokeopacity);
+            this.strokeweight = cfg.getInt(path + ".strokeWeight", def.strokeweight);
+            this.fillcolor = cfg.getString(path + ".fillColor", def.fillcolor);
+            this.fillopacity = cfg.getDouble(path + ".fillOpacity", def.fillopacity);
+            this.label = cfg.getString(path + ".label", null);
+        }
+
+        AreaStyle(FileConfiguration cfg, String path) {
+            this.strokecolor = cfg.getString(path + ".strokeColor", "#FF0000");
+            this.strokeopacity = cfg.getDouble(path + ".strokeOpacity", 0.8D);
+            this.strokeweight = cfg.getInt(path + ".strokeWeight", 3);
+            this.fillcolor = cfg.getString(path + ".fillColor", "#FF0000");
+            this.fillopacity = cfg.getDouble(path + ".fillOpacity", 0.35D);
+        }
+    }
+
+    private class GriefPreventionUpdate extends BukkitRunnable {
+        private GriefPreventionUpdate() {
+        }
+
+        public void run() {
+            if (!JDynmapGriefPrevention.stop) {
+                JDynmapGriefPrevention.taskRunning = true;
+                JDynmapGriefPrevention.this.updateClaims();
+                JDynmapGriefPrevention.taskRunning = false;
+            }
+        }
     }
 }
