@@ -45,6 +45,7 @@ import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
+import org.bstats.bukkit.Metrics;
 
 public class JDynmapGriefPrevention extends JavaPlugin {
     private static Plugin dynmap;
@@ -1314,15 +1315,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         this.versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
 
         if (this.pluginMetrics) {
-            final JMetrics jmetrics = new JMetrics(this);
-            if (jmetrics.isOptOutOk()) {
-
-                new BukkitRunnable() {
-                    public void run() {
-                        jmetrics.send();
-                    }
-                }.runTaskLaterAsynchronously(this, 6000L);
-            }
+            final Metrics metrics = new Metrics(this);
         }
 
         if (this.updateCheck) {
