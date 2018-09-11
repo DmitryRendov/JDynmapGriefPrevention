@@ -4,7 +4,7 @@
 
     <groupId>jahan.khan.jdynmapgriefprevention</groupId>
     <artifactId>JDynmapGriefPrevention</artifactId>
-    <version>3.2.0-SNAPSHOT</version>
+    <version>3.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
     <description>JDynmapGriefPrevention.</description>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.8</version>
+            <version>16.9.alpha</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
