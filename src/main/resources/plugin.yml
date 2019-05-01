@@ -1,10 +1,10 @@
 name: JDynmapGriefPrevention
 main: jahan.khan.jdynmapgriefprevention.JDynmapGriefPrevention
-version: 3.0.0-OSS
+version: 3.2.0
 author: jahangir13, DmitryRendov
-website: http://goo.gl/5lI8Mh
 description: Shows Griefprevention claims and extended info on Dynmap.
 softdepend: [ dynmap, GriefPrevention ]
+api-version: 1.13
 
 commands:
   jdgp:
