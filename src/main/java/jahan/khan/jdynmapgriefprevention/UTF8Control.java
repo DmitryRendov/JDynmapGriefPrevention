@@ -8,7 +8,6 @@ import java.net.URLConnection;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.ResourceBundle.Control;
 
 public class UTF8Control extends ResourceBundle.Control {
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)

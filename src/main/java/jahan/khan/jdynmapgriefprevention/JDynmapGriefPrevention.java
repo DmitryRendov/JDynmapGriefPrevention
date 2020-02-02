@@ -64,7 +64,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static MarkerSet playerset;
     protected Boolean uuidserver = null;
     protected String versionString = "";
-    protected Metrics metrics;
     protected JavaPlugin plugin;
     private static String pluginVersion = "3.1.0-OSS";
     private static String pluginAuthors = "jahangir13,DmitryRendov1";
@@ -1337,26 +1336,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
         this.versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
 
-        if (this.pluginMetrics) {
-            final JMetrics jmetrics = new JMetrics(this);
-            if (jmetrics.isOptOutOk()) {
-
-                new BukkitRunnable() {
-                    public void run() {
-                        jmetrics.send();
-                    }
-                }.runTaskLaterAsynchronously(this, 6000L);
-            }
-        }
-
-        if (this.updateCheck) {
-
-            new BukkitRunnable() {
-                public void run() {
-                    JDynmapGriefPrevention.this.checkForUpdate();
-                }
-            }.runTaskLaterAsynchronously(this, 3000L);
-        }
     }
 
     private void activate() {
@@ -1554,48 +1533,6 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             } catch (Exception localException3) {
             }
         }
-    }
-
-    public Metrics getMetrics() {
-        return this.metrics;
-    }
-
-    public void setMetrics(Metrics metrics) {
-        this.metrics = metrics;
-    }
-
-    private void checkForUpdate() {
-        console(jdgpMessages.getString("updater.checkmsg"));
-        UpdateCheck updatechecker = new UpdateCheck(this, "818", false);
-        UpdateCheck.UpdateResult checkresult = updatechecker.getResult();
-        switch (checkresult) {
-            case FAIL_NOVERSION:
-                console(jdgpMessages.getString("updater.connection_failed"));
-                break;
-
-            case NO_UPDATE:
-                console(jdgpMessages.getString("updater.connection_failed"));
-                break;
-
-            case BAD_RESOURCEID:
-                console(jdgpMessages.getString("updater.no_new_version"));
-                break;
-
-            case UPDATE_AVAILABLE:
-                checkedPluginVersion = updatechecker.getVersion();
-
-                text = MessageFormat.format(jdgpMessages.getString("updater.new_version"),
-                        new Object[]{checkedPluginVersion});
-                console(text);
-
-                console(jdgpMessages.getString("updater.url.color") + "http://goo.gl/5lI8Mh");
-                break;
-            case DISABLED:
-            case FAIL_SPIGOT:
-            default:
-                console(checkresult.toString());
-        }
-
     }
 
     private void readConfigOptions() {

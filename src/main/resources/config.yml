@@ -19,20 +19,6 @@
 #
 ###################################################################################################
 
-# Plugin Metrics: true to allow the plugin to send information to Hidendra's PluginMetric system / false: to disallow
-# (https://forums.bukkit.org/threads/mcstats-plugin-metrics-r7-easy-advanced-plugin-statistics.77352/)
-# Plugin information will then show up here for the plugin developers: http://mcstats.org/plugin/JDynmapGriefPrevention
-# The information is send via an asynchronous task by the Metrics class per default...so no lag will be recognizable on 
-# the server. (Please switch that on. I am happy to see that people are using the plugin and it's important to know which
-# versions of MC/Java are used, in which ranges claim numbers are...and of course which plugin version.)
-pluginmetrics: true
-
-# Plugin update check: true: enabled / false: disabled
-# Checks once 2.5 minutes after server re/start if a new version is available on the Spigot plugin's resource page.
-# This does NOT download, install or update anything automatically! It just sends a message to console.
-# Check is done asynchronously...so if page cannot be reached the main thread does NOT hang or lag.
-updateCheck: false
-
 # Localization:
 # Plugin supports the translation of texts via copying Messages_en.properties file in the lang folder.
 # Left of the '=' signs are the keys which MUST NOT be changed. Translations can be done for everything on the 
