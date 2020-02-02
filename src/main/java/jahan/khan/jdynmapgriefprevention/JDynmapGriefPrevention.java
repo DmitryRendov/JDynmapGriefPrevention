@@ -1,5 +1,7 @@
 package jahan.khan.jdynmapgriefprevention;
 
+import me.ryanhamshire.GPFlags.*;
+//import me.ryanhamshire.GPFlags.api.*;
 import me.ryanhamshire.GriefPrevention.*;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -30,6 +32,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -92,6 +95,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static String stringContainers = "";
     private static String stringAccessors = "";
     private static String stringManagers = "";
+    private static String stringFlags = "";
     private static String coords = "";
     private static String coordx = "";
     private static String coordy = "";
@@ -150,6 +154,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     protected boolean getContainers = true;
     protected boolean getAccessors = true;
     protected boolean getManagers = true;
+    protected boolean getFlags = false;
     protected int countadmin = 0;
     protected int countbuilder = 0;
     protected int countused = 0;
@@ -185,6 +190,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         infowindow = infowindow.replace("%buildersi18%", jdgpMessages.getString("config.infowindow.builders"));
         infowindow = infowindow.replace("%containersonlyi18%", jdgpMessages.getString("config.infowindow.containersonly"));
         infowindow = infowindow.replace("%canenteri18%", jdgpMessages.getString("config.infowindow.canenter"));
+        infowindow = infowindow.replace("%flagsi18%", jdgpMessages.getString("config.infowindow.flags"));
         return infowindow;
     }
 
@@ -194,6 +200,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         admininfowindow = admininfowindow.replace("%trusti18%", jdgpMessages.getString("config.admininfowindow.trust"));
         admininfowindow = admininfowindow.replace("%containertrusti18%", jdgpMessages.getString("config.admininfowindow.containertrust"));
         admininfowindow = admininfowindow.replace("%accesstrusti18%", jdgpMessages.getString("config.admininfowindow.accesstrust"));
+        admininfowindow = admininfowindow.replace("%flagsi18%", jdgpMessages.getString("config.admininfowindow.flags"));
         return admininfowindow;
     }
 
@@ -252,6 +259,10 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
         if (this.getManagers) {
             v = v.replace("%managers%", stringManagers);
+        }
+
+        if (this.getFlags) {
+            v = v.replace("%flags%", stringFlags);
         }
         return v;
     }
@@ -526,6 +537,82 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 accum = accum + managerName;
             }
             stringManagers = accum;
+        }
+        if ( !this.getFlags ) {
+            accum = "";
+            FlagManager flagManager = new FlagManager();
+            GPFlags gpl = new GPFlagsAPI();
+            //flagManager.RegisterFlagDefinition(new FlagDef_NoMobSpawns(flagManager, gpl));
+            //flagManager.RegisterFlagDefinition(new FlagDef_HealthRegen(flagManager, gpl));
+            //flagManager.RegisterFlagDefinition(new FlagDef_NoFlight(flagManager, gpl));
+            //flagManager.RegisterFlagDefinition(new FlagDef_SpleefArena(flagManager, gpl));
+            Collection<Flag> flags;
+            boolean flagsFound = false;
+            StringBuilder builder1 = new StringBuilder();
+            StringBuilder builder2 = new StringBuilder();
+            StringBuilder builder3 = new StringBuilder();
+            Flag flag1 = flagManager.GetFlag(claim.getID().toString(), "NoMonsterSpawns");
+            Flag flag2 = flagManager.GetFlag(claim.getID().toString(), "NoMobSpawns");
+
+            if(claim != null)
+            {
+                flags = flagManager.GetFlags(claim.getID().toString());
+                for(Flag flag : flags)
+                {
+                    flagsFound = true;
+                    builder1.append((flag.getSet() ? "+":"-"));
+                    //builder1.append((flag.getSet() ? "+":"-") + flag.flagDefinition.getName()).append(" ");
+                }
+
+                if(claim.parent != null)
+                {
+                    flags = flagManager.GetFlags(claim.parent.getID().toString());
+                    for(Flag flag : flags)
+                    {
+                        flagsFound = true;
+                       // builder2.append((flag.getSet() ? "+":"-") + flagDefinition.getName()).append(" ");
+                    }
+                }
+
+                /*flags = flagManager.GetFlags(FlagManager.DEFAULT_FLAG_ID);
+                for(Flag flag2 : flags)
+                {
+                    flagsFound = true;
+                    builder3.append((flag2.getSet() ? "+":"-") + flag2.flagDefinition.getName()).append(" ");
+                }*/
+            }
+
+            /*flags = flagManager.GetFlags(player.getWorld().getName());
+            for(Flag flag3 : flags)
+            {
+                flagsFound = true;
+                builder4.append((flag3.getSet() ? "+":"-") + flag3.flagDefinition.getName()).append(" ");
+            }
+            StringBuilder builder5 = new StringBuilder();
+            flags = flagManager.GetFlags("everywhere");
+            for(Flag flag4 : flags)
+            {
+                flagsFound = true;
+                builder5.append((flag4.getSet() ? "+":"-") + flag4.flagDefinition.getName()).append(" ");
+            }*/
+
+            /*if(builder1.length() > 0) GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsClaim, builder1.toString());
+            if(builder2.length() > 0) GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsParent, builder2.toString());
+            if(builder3.length() > 0) GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsDefault, builder3.toString());
+            if(builder4.length() > 0) GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsWorld, builder4.toString());
+            if(builder5.length() > 0) GPFlags.sendMessage(player, TextMode.Info, Messages.FlagsServer, builder5.toString());
+
+            if(!flagsFound)
+            {
+                GPFlags.sendMessage(player, TextMode.Info, Messages.NoFlagsHere);
+            }*/
+
+            if (builder1.length() > 0) {
+                    accum = accum + builder1.toString();
+                }
+
+            stringFlags = accum;
+
         }
 
         if (claim.isAdminClaim()) {
@@ -1539,6 +1626,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         this.getContainers = cfg.getBoolean("getContainers", true);
         this.getAccessors = cfg.getBoolean("getAccessors", true);
         this.getManagers = cfg.getBoolean("getManagers", true);
+        this.getFlags = cfg.getBoolean("getFlags", false);
         this.allowBracketsTrust = cfg.getBoolean("allowBracketsTrust", true);
         this.showcountonlayer = cfg.getBoolean("layer.showcountonlayer", true);
         this.usetwolayers = cfg.getBoolean("layer.usetwolayers", true);

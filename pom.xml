@@ -4,7 +4,7 @@
 
     <groupId>jahan.khan.jdynmapgriefprevention</groupId>
     <artifactId>JDynmapGriefPrevention</artifactId>
-    <version>3.1.0-OSS-SNAPSHOT</version>
+    <version>3.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
     <description>JDynmapGriefPrevention.</description>
@@ -17,43 +17,45 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.TechFortress</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>16.12.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.ryanhamshire</groupId>
-            <artifactId>GriefPrevention</artifactId>
-            <version>16.7.1</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GriefPrevention.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>me.ryanhamshire</groupId>
             <artifactId>GPFlags</artifactId>
-            <version>4.5.3-SNAPSHOT</version>
+            <version>4.7.0</version>
             <type>jar</type>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GriefPreventionFlags.jar</systemPath>
+            <systemPath>${project.basedir}/lib/GriefPreventionFlags5.5.3.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
-            <version>2.5</version>
+            <version>3.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
     <repositories>
-        <!-- Spigot -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>spigot</id>
-            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
+        <!-- GriefPrevention Repo -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <repository>
             <id>dynmap-repo</id>

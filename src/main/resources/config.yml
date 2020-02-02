@@ -1,5 +1,5 @@
 #
-# JDynmap-GriefPrevention configuration v3.1.0-OSS
+# JDynmap-GriefPrevention configuration v3.3.1
 #
 
 ###################################################################################################
@@ -122,7 +122,10 @@ infowindow: '<div class="infowindow">
     %containers%<br><br>
 
     <strong>%canenteri18%:</strong><br>
-    %accessors%<br></div>
+    %accessors%<br><br>
+
+    <strong>%flagsi18%:</strong><br>
+    %flags%<br><br></div>
 ' # don't delete this '
   
 # The look of the popup window that opens clicking a claim / adminclaiminfowindow: administrator claims
@@ -142,7 +145,10 @@ admininfowindow: '<div class="infowindow">
     %containers%<br><br>
 
     <strong>%accesstrusti18%:</strong><br>
-    %accessors%<br><br></div>
+    %accessors%<br><br>
+
+    <strong>%flagsi18%:</strong><br>
+    %flags%<br><br></div>
 ' # don't delete this '
 
 #############################################################################
@@ -283,6 +289,7 @@ getBuilders: true
 getContainers: true
 getAccessors: true
 getManagers: true
+getFlags: false
 
 # Allow to trust a name in brackets (e.g. /trust [xyz]) to keep the claim appear as still being used.
 # I guess GriefPrevention allows this to trust Mod fake players like [BuildCraft] and so I use it for this purpose.
