@@ -1,5 +1,5 @@
 #
-# JDynmap-GriefPrevention configuration v3.0.0-OSS
+# JDynmap-GriefPrevention configuration v3.3.1
 #
 
 ###################################################################################################
@@ -31,7 +31,7 @@ pluginmetrics: true
 # Checks once 2.5 minutes after server re/start if a new version is available on the Spigot plugin's resource page.
 # This does NOT download, install or update anything automatically! It just sends a message to console.
 # Check is done asynchronously...so if page cannot be reached the main thread does NOT hang or lag.
-updateCheck: true
+updateCheck: false
 
 # Localization:
 # Plugin supports the translation of texts via copying Messages_en.properties file in the lang folder.
@@ -122,7 +122,10 @@ infowindow: '<div class="infowindow">
     %containers%<br><br>
 
     <strong>%canenteri18%:</strong><br>
-    %accessors%<br></div>
+    %accessors%<br><br>
+
+    <strong>%flagsi18%:</strong><br>
+    %flags%<br><br></div>
 ' # don't delete this '
   
 # The look of the popup window that opens clicking a claim / adminclaiminfowindow: administrator claims
@@ -142,7 +145,10 @@ admininfowindow: '<div class="infowindow">
     %containers%<br><br>
 
     <strong>%accesstrusti18%:</strong><br>
-    %accessors%<br><br></div>
+    %accessors%<br><br>
+
+    <strong>%flagsi18%:</strong><br>
+    %flags%<br><br></div>
 ' # don't delete this '
 
 #############################################################################
@@ -255,14 +261,14 @@ absenceDayLimit: 40
 # Color of claims of absent claim owners AND builders: the color of the claim if the owner of the claim AND all the builders did not login for more than 'absenceDayLimit' number of days.
 # (default: green fill color and green border color)
 allAbsent:
-  strokeColor: '#000000'
-  fillColor: '#9C9C9C'
+  strokeColor: '#00C120'
+  fillColor: '#7BD58A'
 
 # Color of claims of absent owners: the color of the claims if the owner of the claim did not login for more than 'absenceDayLimit' BUT players in the claims build list (trusted) did not pass this limit yet.
 # (default: green fill color and black border color)
 ownerAbsent:
-  strokeColor: '#303030'
-  fillColor: '#9C9C9C'
+  strokeColor: '#666666'
+  fillColor: '#5FFF7A'
 
 # Fill color for public container trusted claims (so that others can see that they are allowed to do something here).
 # enabled: true - show container public trusted claims / enabled: false - don't show container public trusted claims
@@ -283,6 +289,7 @@ getBuilders: true
 getContainers: true
 getAccessors: true
 getManagers: true
+getFlags: false
 
 # Allow to trust a name in brackets (e.g. /trust [xyz]) to keep the claim appear as still being used.
 # I guess GriefPrevention allows this to trust Mod fake players like [BuildCraft] and so I use it for this purpose.
@@ -319,9 +326,9 @@ playerMap:
 # place where others can see it).
 #
 newswindow: '
-    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v3.0.0-OSS =</strong></span><br>
+    <span style="color:#006600"><strong>= JDynmapGriefPrevention News v3.x =</strong></span><br>
     <br><hr><br>
-    (2018-02-02):<br>
+    (2020-01-02):<br>
     3.x version is OSS <br><br>
     Shows your own claims and claims you have been trusted.<br><br>
     A new dynmap-layer is created which only shows the relevant claims.<br>
@@ -336,7 +343,7 @@ newswindow: '
 # Styles of the news-window can be changed here
 newswindowstyle:
   # true: show newsinfo marker / false: don't show newswindow marker
-  enabled: true
+  enabled: false
   # center coordinates of circle marker
   coordinates:
     x: -2600
