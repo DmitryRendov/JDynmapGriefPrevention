@@ -46,7 +46,6 @@ class JDynmapGriefPrevention extends JavaPlugin {
     private static MarkerSet setunused;
     private static MarkerSet playerset;
     private Boolean uuidserver = null;
-    private String versionString = "";
     private JavaPlugin plugin;
     private static String pluginVersion = "3.1.0-OSS";
     private static String pluginAuthors = "jahangir13,DmitryRendov1";
@@ -92,7 +91,6 @@ class JDynmapGriefPrevention extends JavaPlugin {
     private static String text = "";
 
     protected static ResourceBundle jdgpMessages;
-    //protected static volatile ArrayList claimsInfo;
     protected static volatile ArrayList<ClaimInfo> claimsInfo;
     private volatile int sz = 0;
     private volatile int idx = 0;
@@ -174,7 +172,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return sz;
     }
 
-    public void setSz(int sz) {
+    private void setSz(int sz) {
         this.sz = sz;
     }
 
@@ -182,7 +180,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return idx;
     }
 
-    public void setIdx(int idx) {
+    private void setIdx(int idx) {
         this.idx = idx;
     }
 
@@ -190,7 +188,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return numOwners;
     }
 
-    public void setNumOwners(int numOwners) {
+    private void setNumOwners(int numOwners) {
         this.numOwners = numOwners;
     }
 
@@ -198,7 +196,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return countadmin;
     }
 
-    public void setCountadmin(int countadmin) {
+    private void setCountadmin(int countadmin) {
         this.countadmin = countadmin;
     }
 
@@ -206,31 +204,31 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return countbuilder;
     }
 
-    public void setCountbuilder(int countbuilder) {
+    private void setCountbuilder(int countbuilder) {
         this.countbuilder = countbuilder;
     }
 
-    public int getCountused() {
+    public int getCountUsed() {
         return countused;
     }
 
-    public void setCountused(int countused) {
+    private void setCountUsed(int countused) {
         this.countused = countused;
     }
 
-    public int getCountnormal() {
+    public int getCountNormal() {
         return countnormal;
     }
 
-    public void setCountnormal(int countnormal) {
+    private void setCountNormal(int countnormal) {
         this.countnormal = countnormal;
     }
 
-    public int getCountunused() {
+    public int getCountUnused() {
         return countunused;
     }
 
-    public void setCountunused(int countunused) {
+    private void setCountUnused(int countunused) {
         this.countunused = countunused;
     }
 
@@ -238,7 +236,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return numBuilders;
     }
 
-    public void setNumBuilders(int numBuilders) {
+    private void setNumBuilders(int numBuilders) {
         this.numBuilders = numBuilders;
     }
 
@@ -246,7 +244,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return numBuildersCalcDays;
     }
 
-    public void setNumBuildersCalcDays(int numBuildersCalcDays) {
+    private void setNumBuildersCalcDays(int numBuildersCalcDays) {
         this.numBuildersCalcDays = numBuildersCalcDays;
     }
 
@@ -254,7 +252,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return numContainers;
     }
 
-    public void setNumContainers(int numContainers) {
+    private void setNumContainers(int numContainers) {
         this.numContainers = numContainers;
     }
 
@@ -262,7 +260,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return numAccessors;
     }
 
-    public void setNumAccessors(int numAccessors) {
+    private void setNumAccessors(int numAccessors) {
         this.numAccessors = numAccessors;
     }
 
@@ -270,7 +268,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
         return numManagers;
     }
 
-    public void setNumManagers(int numManagers) {
+    private void setNumManagers(int numManagers) {
         this.numManagers = numManagers;
     }
 
@@ -668,15 +666,15 @@ class JDynmapGriefPrevention extends JavaPlugin {
 
         if (claim.isAdminClaim()) {
             this.setCountadmin(this.getCountadmin() + 1);
-            this.setCountused(this.getCountused() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (!playerLongAgo) {
-            this.setCountnormal(this.getCountnormal() + 1);
-            this.setCountused(this.getCountused() + 1);
+            this.setCountNormal(this.getCountNormal() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (claimUsed) {
             this.setCountbuilder(this.getCountbuilder() + 1);
-            this.setCountused(this.getCountused() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else {
-            this.setCountunused(this.getCountunused() + 1);
+            this.setCountUnused(this.getCountUnused() + 1);
         }
 
         String owner = claim.isAdminClaim() ? ADMIN_ID : oowner;
@@ -894,15 +892,15 @@ class JDynmapGriefPrevention extends JavaPlugin {
 
         if (claim.isAdminClaim()) {
             this.setCountadmin(this.getCountadmin() + 1);
-            this.setCountused(this.getCountused() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (!playerLongAgo) {
-            this.setCountnormal(this.getCountnormal() + 1);
-            this.setCountused(this.getCountused() + 1);
+            this.setCountNormal(this.getCountNormal() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (claimUsed) {
             this.setCountbuilder(this.getCountbuilder() + 1);
-            this.setCountused(this.getCountused() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else {
-            this.setCountunused(this.getCountunused() + 1);
+            this.setCountUnused(this.getCountUnused() + 1);
         }
 
         String owner = claim.isAdminClaim() ? ADMIN_ID : oowner;
@@ -1138,9 +1136,9 @@ class JDynmapGriefPrevention extends JavaPlugin {
 
         this.setCountadmin(0);
         this.setCountbuilder(0);
-        this.setCountused(0);
-        this.setCountunused(0);
-        this.setCountnormal(0);
+        this.setCountUsed(0);
+        this.setCountUnused(0);
+        this.setCountNormal(0);
 
         ArrayList claims = null;
         try {
@@ -1251,9 +1249,9 @@ class JDynmapGriefPrevention extends JavaPlugin {
                     if ((JDynmapGriefPrevention.this.useDynmap) && (JDynmapGriefPrevention.this.showcountonlayer)
                             && (JDynmapGriefPrevention.this.usetwolayers)) {
                         JDynmapGriefPrevention.set.setMarkerSetLabel(jdgpMessages.getString("config.claims.usedname") + " ("
-                                + JDynmapGriefPrevention.this.getCountused() + ")");
+                                + JDynmapGriefPrevention.this.getCountUsed() + ")");
                         JDynmapGriefPrevention.setunused.setMarkerSetLabel(jdgpMessages.getString("config.claims.unusedname") + " ("
-                                + JDynmapGriefPrevention.this.getCountunused() + ")");
+                                + JDynmapGriefPrevention.this.getCountUnused() + ")");
                     }
                 }
 
@@ -1403,7 +1401,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
             activate();
         }
 
-        this.versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
+        String versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
 
     }
 
@@ -2010,11 +2008,11 @@ class JDynmapGriefPrevention extends JavaPlugin {
                             new Object[]{String.valueOf(this.getSz()), String.valueOf(this.getIdx() - this.getSz())});
                     sender.sendMessage(text);
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.used"),
-                            new Object[]{String.valueOf(this.getCountused()), String.valueOf(this.getCountadmin()),
-                                    String.valueOf(this.getCountnormal()), String.valueOf(this.getCountbuilder())});
+                            new Object[]{String.valueOf(this.getCountUsed()), String.valueOf(this.getCountadmin()),
+                                    String.valueOf(this.getCountNormal()), String.valueOf(this.getCountbuilder())});
                     sender.sendMessage(text);
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.unused"),
-                            new Object[]{String.valueOf(this.getCountunused())});
+                            new Object[]{String.valueOf(this.getCountUnused())});
                     sender.sendMessage(text);
                     sender.sendMessage(jdgpMessages.getString("command.stats.separator"));
                     return true;

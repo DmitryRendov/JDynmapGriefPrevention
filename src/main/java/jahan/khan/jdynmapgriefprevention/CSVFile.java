@@ -7,13 +7,13 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import me.ryanhamshire.GriefPrevention.Claim;
 import jahan.khan.JDynmapGriefPrevention.ClaimInfo;
-import jahan.khan.JDynmapGriefPrevention.JDynmapGriefPrevention;
+import static jahan.khan.JDynmapGriefPrevention.JDynmapGriefPrevention.*;
 
 
 class CSVFile {
-    final org.bukkit.plugin.java.JavaPlugin plugin;
+    private final org.bukkit.plugin.java.JavaPlugin plugin;
     private final JDynmapGriefPrevention jdgp;
-    final CommandSender sender;
+    private final CommandSender sender;
     private final String claims_filename;
     private final String stats_filename;
     final String delim = "|";
@@ -27,7 +27,7 @@ class CSVFile {
     }
 
     protected void generate() {
-        this.jdgp.getServer().getScheduler().scheduleAsyncDelayedTask(this.jdgp, new Runnable() {
+        this.jdgp.getServer().getScheduler().runTaskLaterAsynchronously(this.jdgp, new Runnable() {
             public void run() {
                 try {
                     FileWriter writer = new FileWriter(CSVFile.this.claims_filename);
@@ -81,14 +81,14 @@ class CSVFile {
 
                     ClaimInfo hci;
 
-                    for (int i = 0; i < JDynmapGriefPrevention.claimsInfo.size(); i++) {
-                        hci = (ClaimInfo) JDynmapGriefPrevention.claimsInfo.get(i);
+                    for (int i = 0; i < claimsInfo.size(); i++) {
+                        hci = (ClaimInfo) claimsInfo.get(i);
                         Claim claim = hci.claim;
                         String owner = hci.owner;
                         String wname = hci.wname;
-                        Integer ownerdays = Integer.valueOf(hci.ownerdays);
-                        Boolean playerLongAgo = Boolean.valueOf(hci.playerLongAgo);
-                        Boolean claimUsed = Boolean.valueOf(hci.claimUsed);
+                        int ownerdays = hci.ownerdays;
+                        Boolean playerLongAgo = hci.playerLongAgo;
+                        Boolean claimUsed = hci.claimUsed;
 
                         UUID uuidowner = hci.ownerUuid;
                         String uuid;
@@ -141,7 +141,7 @@ class CSVFile {
                         writer.append("|");
                         writer.append(owner);
                         writer.append("|");
-                        writer.append(ownerdays.toString());
+                        writer.append(Integer.toString(ownerdays));
                         writer.append("|");
                         writer.append(playerLongAgo.toString());
                         writer.append("|");
@@ -208,15 +208,15 @@ class CSVFile {
                     writer.append("|");
                     writer.append(String.valueOf(CSVFile.this.jdgp.getIdx() - CSVFile.this.jdgp.getSz()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountused()));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountUsed()));
                     writer.append("|");
                     writer.append(String.valueOf(CSVFile.this.jdgp.getCountadmin()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountnormal()));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountNormal()));
                     writer.append("|");
                     writer.append(String.valueOf(CSVFile.this.jdgp.getCountbuilder()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountunused()));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountUnused()));
                     writer.append("|");
                     writer.append(String.valueOf(CSVFile.this.jdgp.getNumBuilders()));
                     writer.append("|");
@@ -232,7 +232,7 @@ class CSVFile {
                     writer.close();
 
                     CSVFile.this.sender
-                            .sendMessage(JDynmapGriefPrevention.jdgpMessages.getString("command.export.success"));
+                            .sendMessage(jdgpMessages.getString("command.export.success"));
 
                 } catch (IOException e) {
                     e.printStackTrace();
