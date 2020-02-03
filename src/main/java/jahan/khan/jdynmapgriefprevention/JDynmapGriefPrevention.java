@@ -37,7 +37,7 @@ import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 
-class JDynmapGriefPrevention extends JavaPlugin {
+public class JDynmapGriefPrevention extends JavaPlugin {
     private static Plugin dynmap;
     private static DynmapAPI api;
     private static MarkerAPI markerapi;
@@ -47,7 +47,7 @@ class JDynmapGriefPrevention extends JavaPlugin {
     private static MarkerSet playerset;
     private Boolean uuidserver = null;
     private JavaPlugin plugin;
-    private static String pluginVersion = "3.1.0-OSS";
+    private static String pluginVersion = "3.5.0";
     private static String pluginAuthors = "jahangir13,DmitryRendov1";
 
     private static final String DEF_INFOWINDOW = "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
