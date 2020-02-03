@@ -1,4 +1,4 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-public class UTF8Control extends ResourceBundle.Control {
+class UTF8Control extends ResourceBundle.Control {
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
             throws IOException {
         String bundleName = toBundleName(baseName, locale);

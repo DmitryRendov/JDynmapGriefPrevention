@@ -1,18 +1,21 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 
-import me.ryanhamshire.GriefPrevention.Claim;
 import org.bukkit.command.CommandSender;
+import me.ryanhamshire.GriefPrevention.Claim;
+import jahan.khan.JDynmapGriefPrevention.ClaimInfo;
+import jahan.khan.JDynmapGriefPrevention.JDynmapGriefPrevention;
 
-public class CSVFile {
+
+class CSVFile {
     final org.bukkit.plugin.java.JavaPlugin plugin;
-    private JDynmapGriefPrevention jdgp;
-    CommandSender sender;
-    private String claims_filename;
-    private String stats_filename;
+    private final JDynmapGriefPrevention jdgp;
+    final CommandSender sender;
+    private final String claims_filename;
+    private final String stats_filename;
     final String delim = "|";
 
     public CSVFile(JDynmapGriefPrevention plugin, CommandSender sender) {
@@ -49,7 +52,7 @@ public class CSVFile {
                     writer.append("|");
                     writer.append("OwnerOfflineDays");
                     writer.append("|");
-                    writer.append("OverLimit (" + JDynmapGriefPrevention.absenceDayLimit + " days)");
+                    writer.append("OverLimit (").append(String.valueOf(JDynmapGriefPrevention.absenceDayLimit)).append(" days)");
                     writer.append("|");
                     writer.append("StillUsedByOthers(Trusted)");
                     writer.append("|");
@@ -98,14 +101,14 @@ public class CSVFile {
                         if (claimID == null) {
                             claimID = "Subclaim";
                         }
-                        Integer cwidth = Integer.valueOf(hci.cwidth);
-                        Integer cheight = Integer.valueOf(hci.cheight);
-                        Integer csize = Integer.valueOf(hci.csize);
+                        Integer cwidth = hci.cwidth;
+                        Integer cheight = hci.cheight;
+                        Integer csize = hci.csize;
                         String coords = hci.coords;
                         String coordx = hci.coordx;
                         String coordy = hci.coordy;
                         String coordz = hci.coordz;
-                        Boolean publictrust = Boolean.valueOf(hci.publictrust);
+                        Boolean publictrust = hci.publictrust;
                         String stringBuilders = hci.stringBuilders;
                         String stringContainers = hci.stringContainers;
                         String stringAccessors = hci.stringAccessors;
@@ -152,11 +155,11 @@ public class CSVFile {
                         writer.append("|");
                         writer.append(publictrust.toString());
                         writer.append("|");
-                        writer.append("/jdgp tp " + claimID);
+                        writer.append("/jdgp tp ").append(claimID);
                         writer.append("|");
-                        writer.append("/jdgp tp " + coordx + " " + coordz);
+                        writer.append("/jdgp tp ").append(coordx).append(" ").append(coordz);
                         writer.append("|");
-                        writer.append("/tppos " + coordx + " " + coordy + " " + coordz);
+                        writer.append("/tppos ").append(coordx).append(" ").append(coordy).append(" ").append(coordz);
                         writer.append("|");
                         writer.append(stringBuilders);
                         writer.append("|");
@@ -199,29 +202,29 @@ public class CSVFile {
                     writer.append("|");
                     writer.append('\n');
 
-                    writer.append(String.valueOf(CSVFile.this.jdgp.numOwners));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getNumOwners()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.sz));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getSz()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.idx - CSVFile.this.jdgp.sz));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getIdx() - CSVFile.this.jdgp.getSz()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.countused));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountused()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.countadmin));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountadmin()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.countnormal));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountnormal()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.countbuilder));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountbuilder()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.countunused));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getCountunused()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.numBuilders));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getNumBuilders()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.numContainers));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getNumContainers()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.numAccessors));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getNumAccessors()));
                     writer.append("|");
-                    writer.append(String.valueOf(CSVFile.this.jdgp.numManagers));
+                    writer.append(String.valueOf(CSVFile.this.jdgp.getNumManagers()));
                     writer.append("|");
                     writer.append('\n');
 

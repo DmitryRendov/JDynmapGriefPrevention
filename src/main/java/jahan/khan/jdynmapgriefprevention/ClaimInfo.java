@@ -1,4 +1,4 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
 import java.util.UUID;
 

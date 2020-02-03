@@ -1,4 +1,4 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
 class VersionTokenizer {
     private final String _versionString;
