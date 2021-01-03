@@ -48,7 +48,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private Boolean uuidserver = null;
     private JavaPlugin plugin;
     private static String pluginVersion = "3.6.1";
-    private static String pluginAuthors = "jahangir13,DmitryRendov1";
+    private static String pluginAuthors = "mikeprimm,jahangir13,DmitryRendov1";
 
     private static final String DEF_INFOWINDOW = "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
     private static final String DEF_ADMININFOWINDOW = "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
@@ -1373,6 +1373,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             pluginVersion = getDescription().getVersion();
             activate();
         }
+
+        int pluginId = 9872; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
 
         String versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
 
