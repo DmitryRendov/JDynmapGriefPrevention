@@ -1,21 +1,11 @@
 #
-# JDynmap-GriefPrevention configuration v3.5.x
+# JDynmap-GriefPrevention configuration v3.x
 #
 
 ###################################################################################################
 #
 # INFO: UUID based / NAME based Server
 # Plugin checks if the server is uuid or name based.
-#
-# 1.) UUID based: Minecraft version >= 1.7.5 AND Griefprevention version >= 8.1
-# (player file names in <server>/world/playerdata/ are in format player_uuid.dat)
-# (file names in <server>/plugins/GriefpreventionData/PlayerData/ are in format player_uuid)
-#
-# 2.) NAME based: Minecraft version < 1.7.5 AND Griefprevention version < 8.1
-# (player file names in <server>/world/players/ are in format player_name.dat)
-# (file names in <server>/plugins/GriefpreventionData/PlayerData/ are in format player_name)
-#
-# Else: if neither 1 nor 2 is true the plugin will not start and terminates with console message
 #
 ###################################################################################################
 
@@ -109,9 +99,6 @@ infowindow: '<div class="infowindow">
 
     <strong>%canenteri18%:</strong><br>
     %accessors%<br><br>
-
-    <strong>%flagsi18%:</strong><br>
-    %flags%<br><br></div>
 ' # don't delete this '
   
 # The look of the popup window that opens clicking a claim / adminclaiminfowindow: administrator claims
@@ -132,9 +119,6 @@ admininfowindow: '<div class="infowindow">
 
     <strong>%accesstrusti18%:</strong><br>
     %accessors%<br><br>
-
-    <strong>%flagsi18%:</strong><br>
-    %flags%<br><br></div>
 ' # don't delete this '
 
 #############################################################################
@@ -275,7 +259,6 @@ getBuilders: true
 getContainers: true
 getAccessors: true
 getManagers: true
-getFlags: false
 
 # Allow to trust a name in brackets (e.g. /trust [xyz]) to keep the claim appear as still being used.
 # I guess GriefPrevention allows this to trust Mod fake players like [BuildCraft] and so I use it for this purpose.
