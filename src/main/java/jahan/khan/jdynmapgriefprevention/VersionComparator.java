@@ -1,8 +1,8 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
 import java.util.Comparator;
 
-public class VersionComparator implements Comparator<Object> {
+class VersionComparator implements Comparator<Object> {
     public boolean equals(Object o1, Object o2) {
         return compare(o1, o2) == 0;
     }
@@ -12,10 +12,10 @@ public class VersionComparator implements Comparator<Object> {
         String version2 = (String) o2;
         VersionTokenizer tokenizer1 = new VersionTokenizer(version1);
         VersionTokenizer tokenizer2 = new VersionTokenizer(version2);
-        int number1 = 0;
-        int number2 = 0;
-        String suffix1 = "";
-        String suffix2 = "";
+        int number1;
+        int number2;
+        String suffix1;
+        String suffix2;
         while (tokenizer1.MoveNext()) {
             if (!tokenizer2.MoveNext()) {
                 do {

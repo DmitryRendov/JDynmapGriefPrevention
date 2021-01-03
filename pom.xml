@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jahan.khan.jdynmapgriefprevention</groupId>
+    <groupId>jahan.khan</groupId>
     <artifactId>JDynmapGriefPrevention</artifactId>
-    <version>3.3.1-SNAPSHOT</version>
+    <version>3.6.1</version>
     <packaging>jar</packaging>
     <name>JDynmapGriefPrevention</name>
     <description>JDynmapGriefPrevention.</description>
@@ -19,19 +19,19 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.12.0</version>
+            <version>16.16.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>us.dynmap</groupId>
             <artifactId>dynmap-api</artifactId>
-            <version>3.0-SNAPSHOT</version>
+            <version>3.0-beta-10</version>
         </dependency>
     </dependencies>
 
@@ -59,7 +59,7 @@
     <build>
         <defaultGoal>clean package</defaultGoal>
         <finalName>${project.name}${project.version}</finalName>
-        <sourceDirectory>${basedir}/src</sourceDirectory>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <filtering>true</filtering>

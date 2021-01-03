@@ -1,4 +1,4 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,16 +8,7 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -46,14 +37,6 @@ import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 
-import java.io.PrintStream;
-import java.net.URI;
-import java.util.Map.Entry;
-import org.bukkit.Server;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfigurationOptions;
-import org.bukkit.scheduler.BukkitScheduler;
-
 public class JDynmapGriefPrevention extends JavaPlugin {
     private static Plugin dynmap;
     private static DynmapAPI api;
@@ -62,14 +45,11 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static MarkerSet set;
     private static MarkerSet setunused;
     private static MarkerSet playerset;
-    protected Boolean uuidserver = null;
-    protected String versionString = "";
-    protected Metrics metrics;
-    protected JavaPlugin plugin;
-    private static String pluginVersion = "3.1.0-OSS";
+    private Boolean uuidserver = null;
+    private JavaPlugin plugin;
+    private static String pluginVersion = "3.6.1";
     private static String pluginAuthors = "jahangir13,DmitryRendov1";
 
-    private static String checkedPluginVersion;
     private static final String DEF_INFOWINDOW = "<div class=\"infowindow\">Claim Owner: <span style=\"font-weight:bold;\">%owner%</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
     private static final String DEF_ADMININFOWINDOW = "<div class=\"infowindow\"><span style=\"font-weight:bold;\">Administrator Claim</span><br/>Permission Trust: <span style=\"font-weight:bold;\">%managers%</span><br/>Trust: <span style=\"font-weight:bold;\">%builders%</span><br/>Container Trust: <span style=\"font-weight:bold;\">%containers%</span><br/>Access Trust: <span style=\"font-weight:bold;\">%accessors%</span></div>";
     private static final String DEF_NEWSWINDOW = "= JDynmapGriefPrevention News =";
@@ -84,7 +64,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static int per = 900;
     private static long updperiod;
     private static Set<String> visible;
-    private static Set<String> hidden;
+    private static HashSet hidden;
     private static boolean stop;
     private static volatile Map<String, AreaMarker> resareas = new HashMap(1000, 0.75F);
     private static volatile Map<String, AreaMarker> presareas = new HashMap(50, 0.75F);
@@ -92,12 +72,12 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static volatile boolean mapPlayerAlreadyRunning = false;
     private static String mapPlayerName = "";
     private static int mapDisplayTime = 30;
-    protected boolean mapUsePlayerName = true;
+    private boolean mapUsePlayerName = true;
     private static String mapLayerName = "GP Player Map";
-    protected boolean mapHideOtherLayers = true;
+    private boolean mapHideOtherLayers = true;
 
     private static CircleMarker newsmarker = null;
-    protected boolean nwsEnabled = true;
+    private boolean nwsEnabled = true;
     private static int nwsCoordsX = 0;
     private static int nwsCoordsZ = 0;
     private static int nwsRadius = 100;
@@ -107,13 +87,12 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static String nwsFillColor;
     private static double nwsFillOpacity = 0.8D;
 
-    private static Locale jdgpLocale;
     private static String text = "";
 
     protected static ResourceBundle jdgpMessages;
     protected static volatile ArrayList<ClaimInfo> claimsInfo;
-    protected volatile int sz = 0;
-    protected volatile int idx = 0;
+    private volatile int sz = 0;
+    private volatile int idx = 0;
     private static boolean claimUsed = false;
     private static UUID uuidowner = null;
     private static String claimID = "";
@@ -133,91 +112,163 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     private static boolean playerLongAgo = false;
 
     private static FileConfiguration cfg;
-    boolean use3d = false;
-    boolean useDynmap = true;
+    private boolean use3d = false;
+    private boolean useDynmap = true;
     private static boolean publictrust = false;
-    protected static int absenceDayLimit = 40;
+    public static int absenceDayLimit = 40;
     private static String allAbsentStrokeColor;
     private static String allAbsentFillColor;
     private static String ownerAbsentStrokeColor;
     private static String ownerAbsentFillColor;
     private static String publicFillColor;
-    protected boolean publicenabled = true;
-    protected boolean allowBracketsTrust = true;
-    protected String cfglocale = "en";
-    protected boolean updconslog = true;
-    protected boolean showcountonlayer = true;
-    protected boolean usetwolayers = true;
+    private boolean publicenabled = true;
+    private boolean allowBracketsTrust = true;
+    private String cfglocale = "en";
+    private boolean updconslog = true;
+    private boolean showcountonlayer = true;
+    private boolean usetwolayers = true;
     private static int layerPrio = 0;
     private static int layerPrioUnused = 0;
     private static boolean hideByDefaultUnused = false;
     private static boolean hideByDefault = false;
     private static boolean reload = false;
     private static volatile boolean reloadwait = false;
-    protected boolean pluginMetrics = true;
-    protected boolean updateCheck = true;
+    private boolean pluginMetrics = true;
+    private boolean updateCheck = true;
     private static volatile boolean taskRunning = false;
-    protected boolean debug = false;
+    private boolean debug = false;
     private static boolean userDisable = false;
-    protected boolean getOwnerUuid = false;
-    protected boolean getClaimSize = true;
-    protected boolean getClaimID = true;
-    protected boolean getClaimCoords = true;
-    protected boolean getBuilders = true;
-    protected boolean getContainers = true;
-    protected boolean getAccessors = true;
-    protected boolean getManagers = true;
+    private boolean getOwnerUuid = false;
+    private boolean getClaimSize = true;
+    private boolean getClaimID = true;
+    private boolean getClaimCoords = true;
+    private boolean getBuilders = true;
+    private boolean getContainers = true;
+    private boolean getAccessors = true;
+    private boolean getManagers = true;
     private static int taskid = -1;
 
     private static long startTimeUC = 0L;
     private static long startTime = 0L;
-    private static long estimatedTime = 0L;
     private static long startTime1 = 0L;
-    private static long estimatedTime1 = 0L;
-    private static long estimatedTimeClaims = 0L;
     private static long startTimeSubclaims = 0L;
-    private static long estimatedTimeSubclaims = 0L;
-    private static long estimatedTimeUC = 0L;
     private static long startTimeUCMAP = 0L;
     private static long estimatedTimeUCMAP = 0L;
 
-    protected int countadmin = 0;
-    protected int countbuilder = 0;
-    protected int countused = 0;
-    protected int countnormal = 0;
-    protected int countunused = 0;
-    protected int numOwners = 0;
-    protected int numBuilders = 0;
-    protected int numBuildersCalcDays = 0;
-    protected int numContainers = 0;
-    protected int numAccessors = 0;
-    protected int numManagers = 0;
+    private int countadmin = 0;
+    private int countbuilder = 0;
+    private int countused = 0;
+    private int countnormal = 0;
+    private int countunused = 0;
+    private int numOwners = 0;
+    private int numBuilders = 0;
+    private int numBuildersCalcDays = 0;
+    private int numContainers = 0;
+    private int numAccessors = 0;
+    private int numManagers = 0;
 
-    private static class AreaStyle {
-        String strokecolor;
+    public int getSz() {
+        return sz;
+    }
 
-        double strokeopacity;
-        int strokeweight;
-        String fillcolor;
-        double fillopacity;
-        String label;
+    private void setSz(int sz) {
+        this.sz = sz;
+    }
 
-        AreaStyle(FileConfiguration cfg, String path, AreaStyle def) {
-            this.strokecolor = cfg.getString(path + ".strokeColor", def.strokecolor);
-            this.strokeopacity = cfg.getDouble(path + ".strokeOpacity", def.strokeopacity);
-            this.strokeweight = cfg.getInt(path + ".strokeWeight", def.strokeweight);
-            this.fillcolor = cfg.getString(path + ".fillColor", def.fillcolor);
-            this.fillopacity = cfg.getDouble(path + ".fillOpacity", def.fillopacity);
-            this.label = cfg.getString(path + ".label", null);
-        }
+    public int getIdx() {
+        return idx;
+    }
 
-        AreaStyle(FileConfiguration cfg, String path) {
-            this.strokecolor = cfg.getString(path + ".strokeColor", "#FF0000");
-            this.strokeopacity = cfg.getDouble(path + ".strokeOpacity", 0.8D);
-            this.strokeweight = cfg.getInt(path + ".strokeWeight", 3);
-            this.fillcolor = cfg.getString(path + ".fillColor", "#FF0000");
-            this.fillopacity = cfg.getDouble(path + ".fillOpacity", 0.35D);
-        }
+    private void setIdx(int idx) {
+        this.idx = idx;
+    }
+
+    public int getNumOwners() {
+        return numOwners;
+    }
+
+    private void setNumOwners(int numOwners) {
+        this.numOwners = numOwners;
+    }
+
+    public int getCountadmin() {
+        return countadmin;
+    }
+
+    private void setCountadmin(int countadmin) {
+        this.countadmin = countadmin;
+    }
+
+    public int getCountbuilder() {
+        return countbuilder;
+    }
+
+    private void setCountbuilder(int countbuilder) {
+        this.countbuilder = countbuilder;
+    }
+
+    public int getCountUsed() {
+        return countused;
+    }
+
+    private void setCountUsed(int countused) {
+        this.countused = countused;
+    }
+
+    public int getCountNormal() {
+        return countnormal;
+    }
+
+    private void setCountNormal(int countnormal) {
+        this.countnormal = countnormal;
+    }
+
+    public int getCountUnused() {
+        return countunused;
+    }
+
+    private void setCountUnused(int countunused) {
+        this.countunused = countunused;
+    }
+
+    public int getNumBuilders() {
+        return numBuilders;
+    }
+
+    private void setNumBuilders(int numBuilders) {
+        this.numBuilders = numBuilders;
+    }
+
+    public int getNumBuildersCalcDays() {
+        return numBuildersCalcDays;
+    }
+
+    private void setNumBuildersCalcDays(int numBuildersCalcDays) {
+        this.numBuildersCalcDays = numBuildersCalcDays;
+    }
+
+    public int getNumContainers() {
+        return numContainers;
+    }
+
+    private void setNumContainers(int numContainers) {
+        this.numContainers = numContainers;
+    }
+
+    public int getNumAccessors() {
+        return numAccessors;
+    }
+
+    private void setNumAccessors(int numAccessors) {
+        this.numAccessors = numAccessors;
+    }
+
+    public int getNumManagers() {
+        return numManagers;
+    }
+
+    private void setNumManagers(int numManagers) {
+        this.numManagers = numManagers;
     }
 
     //adds a server log entry
@@ -257,8 +308,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         return admininfowindow;
     }
 
-    private String formatInfoWindow(Claim claim, AreaMarker m) {
-        String v = "";
+    private String formatInfoWindow(Claim claim) {
+        String v;
 
         if (claim.isAdminClaim()) {
             v = "<div class=\"regioninfo\">" + this.getAdminInfoWindowI18(admininfowindowTmpl) + "</div>";
@@ -322,18 +373,14 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             return false;
         }
 
-        if ((hidden != null) && (hidden.size() > 0) && ((hidden.contains(owner))
-                || (hidden.contains("world:" + worldname)) || (hidden.contains(worldname + "/" + owner)))) {
-            return false;
-        }
-
-        return true;
+        return (hidden == null) || (hidden.size() <= 0) || ((!hidden.contains(owner))
+                && (!hidden.contains("world:" + worldname)) && (!hidden.contains(worldname + "/" + owner)));
     }
 
-    private void addStyle(String owner, String worldid, AreaMarker m, Claim claim, boolean isPlayerMapClaim) {
+    private void addStyle(String owner, AreaMarker m) {
         AreaStyle as = null;
-        int sc = 0;
-        int fc = 0;
+        int sc;
+        int fc;
 
         if (!ownerstyle.isEmpty()) {
             as = (AreaStyle) ownerstyle.get(owner);
@@ -347,7 +394,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         try {
             sc = Integer.parseInt(as.strokecolor.substring(1), 16);
             fc = Integer.parseInt(as.fillcolor.substring(1), 16);
-        } catch (NumberFormatException localNumberFormatException) {
+        } catch (NumberFormatException ignored) {
         }
 
         if (ownerdays > absenceDayLimit) {
@@ -361,7 +408,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 try {
                     sc = Integer.parseInt(allAbsentStrokeColor.substring(1), 16);
                     fc = Integer.parseInt(allAbsentFillColor.substring(1), 16);
-                } catch (NumberFormatException localNumberFormatException1) {
+                } catch (NumberFormatException ignored) {
                 }
             } else {
                 sc = 0;
@@ -369,7 +416,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 try {
                     sc = Integer.parseInt(ownerAbsentStrokeColor.substring(1), 16);
                     fc = Integer.parseInt(ownerAbsentFillColor.substring(1), 16);
-                } catch (NumberFormatException localNumberFormatException2) {
+                } catch (NumberFormatException ignored) {
                 }
             }
         }
@@ -378,7 +425,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             fc = 10104574;
             try {
                 fc = Integer.parseInt(publicFillColor.substring(1), 16);
-            } catch (NumberFormatException localNumberFormatException3) {
+            } catch (NumberFormatException ignored) {
             }
         }
 
@@ -419,8 +466,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         claimUsed = false;
         publictrust = false;
         playerLongAgo = false;
-        ownerdays = 0;
-        int builderdays = 0;
+        int builderdays;
         stringBuilders = "";
         stringContainers = "";
         stringAccessors = "";
@@ -441,8 +487,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
             ownerdays = getDayDifference(lastLogin);
 
-            if (((oowner != null) && (oowner.equals("somebody"))) || (oowner == null)) {
-
+            if (oowner == null || (oowner.equals("somebody"))) {
                 oowner = "-= unknown =-";
                 ownerdays = 666;
             }
@@ -465,7 +510,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 cwidth = claim.getWidth();
                 cheight = claim.getHeight();
                 csize = claim.getHeight() * claim.getWidth();
-            } catch (Exception localException1) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -482,21 +527,20 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             coords = coordx + " " + coordy + " " + coordz;
         }
 
-        ArrayList<String> builders = new ArrayList();
-        ArrayList<String> containers = new ArrayList();
-        ArrayList<String> accessors = new ArrayList();
-        ArrayList<String> managers = new ArrayList();
+        ArrayList builders = new ArrayList();
+        ArrayList containers = new ArrayList();
+        ArrayList accessors = new ArrayList();
+        ArrayList managers = new ArrayList();
         claim.getPermissions(builders, containers, accessors, managers);
 
         OfflinePlayer op = null;
 
-        String accum = "";
+        StringBuilder accum = new StringBuilder();
 
         if (this.getBuilders) {
             for (int i = 0; i < builders.size(); i++) {
-                this.numBuilders += 1;
+                this.setNumBuilders(this.getNumBuilders() + 1);
                 builderdays = 0;
-                op = null;
 
                 String builderName = (String) builders.get(i);
                 op = getUuidOfflinePlayer(builderName);
@@ -505,8 +549,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 }
 
                 if (ownerdays > absenceDayLimit) {
-                    this.numBuildersCalcDays += 1;
-                    lastLogin = 0L;
+                    this.setNumBuildersCalcDays(this.getNumBuildersCalcDays() + 1);
+
                     if (op == null) {
                         if ((builderName.length() > 0) && (builderName.charAt(0) == '[')) {
                             if (this.allowBracketsTrust) {
@@ -530,24 +574,23 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 }
 
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 if (ownerdays > absenceDayLimit) {
-                    accum = accum + builderName + " (" + builderdays + ")";
+                    accum.append(builderName).append(" (").append(builderdays).append(")");
                 } else {
-                    accum = accum + builderName;
+                    accum.append(builderName);
                 }
             }
-            stringBuilders = accum;
+            stringBuilders = accum.toString();
         }
 
         if (this.getContainers) {
-            accum = "";
+            accum = new StringBuilder();
             for (int i = 0; i < containers.size(); i++) {
-                this.numContainers += 1;
+                this.setNumContainers(this.getNumContainers() + 1);
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 String containerName = (String) containers.get(i);
-                op = null;
                 op = getUuidOfflinePlayer(containerName);
                 if (op != null) {
                     containerName = op.getName();
@@ -557,56 +600,54 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     publictrust = true;
                 }
 
-                accum = accum + containerName;
+                accum.append(containerName);
             }
-            stringContainers = accum;
+            stringContainers = accum.toString();
         }
 
         if (this.getAccessors) {
-            accum = "";
+            accum = new StringBuilder();
             for (int i = 0; i < accessors.size(); i++) {
-                this.numAccessors += 1;
+                this.setNumAccessors(this.getNumAccessors() + 1);
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 String accessorName = (String) accessors.get(i);
-                op = null;
                 op = getUuidOfflinePlayer(accessorName);
                 if (op != null) {
                     accessorName = op.getName();
                 }
-                accum = accum + accessorName;
+                accum.append(accessorName);
             }
-            stringAccessors = accum;
+            stringAccessors = accum.toString();
         }
 
         if (this.getManagers) {
-            accum = "";
+            accum = new StringBuilder();
             for (int i = 0; i < managers.size(); i++) {
-                this.numManagers += 1;
+                this.setNumManagers(this.getNumManagers() + 1);
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 String managerName = (String) managers.get(i);
-                op = null;
                 op = getUuidOfflinePlayer(managerName);
                 if (op != null) {
                     managerName = op.getName();
                 }
-                accum = accum + managerName;
+                accum.append(managerName);
             }
-            stringManagers = accum;
+            stringManagers = accum.toString();
         }
 
         if (claim.isAdminClaim()) {
-            this.countadmin += 1;
-            this.countused += 1;
+            this.setCountadmin(this.getCountadmin() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (!playerLongAgo) {
-            this.countnormal += 1;
-            this.countused += 1;
+            this.setCountNormal(this.getCountNormal() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (claimUsed) {
-            this.countbuilder += 1;
-            this.countused += 1;
-        } else if (!claimUsed) {
-            this.countunused += 1;
+            this.setCountbuilder(this.getCountbuilder() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
+        } else {
+            this.setCountUnused(this.getCountUnused() + 1);
         }
 
         String owner = claim.isAdminClaim() ? ADMIN_ID : oowner;
@@ -670,8 +711,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         claimUsed = false;
         publictrust = false;
         playerLongAgo = false;
-        ownerdays = 0;
-        int builderdays = 0;
+        int builderdays;
         stringBuilders = "";
         stringContainers = "";
         stringAccessors = "";
@@ -713,7 +753,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 cwidth = claim.getWidth();
                 cheight = claim.getHeight();
                 csize = claim.getHeight() * claim.getWidth();
-            } catch (Exception localException1) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -730,28 +770,26 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             coords = coordx + " " + coordy + " " + coordz;
         }
 
-        ArrayList<String> builders = new ArrayList();
-        ArrayList<String> containers = new ArrayList();
-        ArrayList<String> accessors = new ArrayList();
-        ArrayList<String> managers = new ArrayList();
+        ArrayList builders = new ArrayList();
+        ArrayList containers = new ArrayList();
+        ArrayList accessors = new ArrayList();
+        ArrayList managers = new ArrayList();
         claim.getPermissions(builders, containers, accessors, managers);
 
-        OfflinePlayer op = null;
+        OfflinePlayer op;
 
-        String accum = "";
+        StringBuilder accum = new StringBuilder();
 
         if (this.getBuilders) {
             for (int i = 0; i < builders.size(); i++) {
-                this.numBuilders += 1;
+                this.setNumBuilders(this.getNumBuilders() + 1);
                 builderdays = 0;
-                op = null;
 
                 String builderName = (String) builders.get(i);
                 op = getNameOfflinePlayer(builderName);
 
                 if (ownerdays > absenceDayLimit) {
-                    this.numBuildersCalcDays += 1;
-                    lastLogin = 0L;
+                    this.setNumBuildersCalcDays(this.getNumBuildersCalcDays() + 1);
                     if (op == null) {
                         if ((builderName.length() > 0) && (builderName.charAt(0) == '[')) {
                             if (this.allowBracketsTrust) {
@@ -774,68 +812,68 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 }
 
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 if (ownerdays > absenceDayLimit) {
-                    accum = accum + builderName + " (" + builderdays + ")";
+                    accum.append(builderName).append(" (").append(builderdays).append(")");
                 } else {
-                    accum = accum + builderName;
+                    accum.append(builderName);
                 }
             }
-            stringBuilders = accum;
+            stringBuilders = accum.toString();
         }
 
         if (this.getContainers) {
-            accum = "";
+            accum = new StringBuilder();
             for (int i = 0; i < containers.size(); i++) {
-                this.numContainers += 1;
+                this.setNumContainers(this.getNumContainers() + 1);
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 String containerName = (String) containers.get(i);
 
                 if ((this.publicenabled) && (((String) containers.get(i)).equals("public"))) {
                     publictrust = true;
                 }
 
-                accum = accum + containerName;
+                accum.append(containerName);
             }
-            stringContainers = accum;
+            stringContainers = accum.toString();
         }
 
         if (this.getAccessors) {
-            accum = "";
+            accum = new StringBuilder();
             for (int i = 0; i < accessors.size(); i++) {
-                this.numAccessors += 1;
+                this.setNumAccessors(this.getNumAccessors() + 1);
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 String accessorName = (String) accessors.get(i);
-                accum = accum + accessorName;
+                accum.append(accessorName);
             }
-            stringAccessors = accum;
+            stringAccessors = accum.toString();
         }
 
         if (this.getManagers) {
-            accum = "";
+            accum = new StringBuilder();
             for (int i = 0; i < managers.size(); i++) {
-                this.numManagers += 1;
+                this.setNumManagers(this.getNumManagers() + 1);
                 if (i > 0)
-                    accum = accum + ", ";
+                    accum.append(", ");
                 String managerName = (String) managers.get(i);
-                accum = accum + managerName;
+                accum.append(managerName);
             }
-            stringManagers = accum;
+            stringManagers = accum.toString();
         }
 
         if (claim.isAdminClaim()) {
-            this.countadmin += 1;
-            this.countused += 1;
+            this.setCountadmin(this.getCountadmin() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (!playerLongAgo) {
-            this.countnormal += 1;
-            this.countused += 1;
+            this.setCountNormal(this.getCountNormal() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
         } else if (claimUsed) {
-            this.countbuilder += 1;
-            this.countused += 1;
-        } else if (!claimUsed) {
-            this.countunused += 1;
+            this.setCountbuilder(this.getCountbuilder() + 1);
+            this.setCountUsed(this.getCountUsed() + 1);
+        } else {
+            this.setCountUnused(this.getCountUnused() + 1);
         }
 
         String owner = claim.isAdminClaim() ? ADMIN_ID : oowner;
@@ -869,10 +907,10 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         claimsInfo.add(hci);
     }
 
-    private Map<String, AreaMarker> updatePlayerClaimsMap(ArrayList<ClaimInfo> playerClaims) {
-        Map<String, AreaMarker> tmpnewmap = new HashMap(claimsInfo.size());
+    private HashMap updatePlayerClaimsMap(ArrayList<ClaimInfo> playerClaims) {
+        HashMap tmpnewmap = new HashMap(claimsInfo.size());
 
-        ClaimInfo hplayerci = null;
+        ClaimInfo hplayerci;
 
         for (int i = 0; i < playerClaims.size(); i++) {
             hplayerci = (ClaimInfo) playerClaims.get(i);
@@ -923,9 +961,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                         pm.setRangeY(l1.getY() + 1.0D, l0.getY());
                     }
 
-                    String desc = formatInfoWindow(claim, pm);
+                    String desc = formatInfoWindow(claim);
 
-                    addStyle(owner, wname, pm, claim, true);
+                    addStyle(owner, pm);
 
                     pm.setDescription(desc);
 
@@ -936,10 +974,10 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         return tmpnewmap;
     }
 
-    private Map<String, AreaMarker> updateClaimsMap() {
-        Map<String, AreaMarker> tmpnewmap = new HashMap(claimsInfo.size());
+    private HashMap updateClaimsMap() {
+        HashMap tmpnewmap = new HashMap(claimsInfo.size());
 
-        ClaimInfo hci = null;
+        ClaimInfo hci;
 
         for (int i = 0; i < claimsInfo.size(); i++) {
             hci = (ClaimInfo) claimsInfo.get(i);
@@ -1003,9 +1041,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     m.setRangeY(l1.getY() + 1.0D, l0.getY());
                 }
 
-                String desc = formatInfoWindow(claim, m);
+                String desc = formatInfoWindow(claim);
 
-                addStyle(owner, wname, m, claim, false);
+                addStyle(owner, m);
 
                 m.setDescription(desc);
 
@@ -1016,14 +1054,14 @@ public class JDynmapGriefPrevention extends JavaPlugin {
     }
 
     private void updateClaims() {
-        this.idx = 0;
-        this.sz = 0;
-        this.numBuilders = 0;
-        this.numBuildersCalcDays = 0;
-        this.numContainers = 0;
-        this.numAccessors = 0;
-        this.numManagers = 0;
-        this.numOwners = 0;
+        this.setIdx(0);
+        this.setSz(0);
+        this.setNumBuilders(0);
+        this.setNumBuildersCalcDays(0);
+        this.setNumContainers(0);
+        this.setNumAccessors(0);
+        this.setNumManagers(0);
+        this.setNumOwners(0);
 
         claimsInfo = new ArrayList();
 
@@ -1036,14 +1074,14 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
 
         DataStore ds = gp.dataStore;
-        OfflinePlayer[] offlinePlayers = null;
+        OfflinePlayer[] offlinePlayers;
 
         if (this.debug) {
             startTime = System.nanoTime();
         }
         offlinePlayers = getServer().getOfflinePlayers();
         if (this.debug) {
-            estimatedTime = System.nanoTime() - startTime;
+            long estimatedTime = System.nanoTime() - startTime;
             System.out.println("JDGP:   Async: Load Offline Players List : "
                     + TimeUnit.NANOSECONDS.toMillis(estimatedTime) + " ms");
         }
@@ -1064,18 +1102,18 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             }
         }
         if (this.debug) {
-            estimatedTime1 = System.nanoTime() - startTime1;
+            long estimatedTime1 = System.nanoTime() - startTime1;
             System.out.println("JDGP:   Async: Build Offline Players Map : "
                     + TimeUnit.NANOSECONDS.toMillis(estimatedTime1) + " ms");
         }
 
-        this.countadmin = 0;
-        this.countbuilder = 0;
-        this.countused = 0;
-        this.countunused = 0;
-        this.countnormal = 0;
+        this.setCountadmin(0);
+        this.setCountbuilder(0);
+        this.setCountUsed(0);
+        this.setCountUnused(0);
+        this.setCountNormal(0);
 
-        ArrayList<Claim> claims = null;
+        ArrayList claims = null;
         try {
             Field fld = DataStore.class.getDeclaredField("claims");
             fld.setAccessible(true);
@@ -1083,21 +1121,22 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             if ((o instanceof ArrayList)) {
                 claims = (ArrayList) o;
             } else {
+                assert o instanceof ArrayList;
                 Object ca = (ArrayList) o;
                 claims = new ArrayList();
                 for (int i = 0; i < ((ArrayList) ca).size(); i++) {
                     claims.add((Claim) ((ArrayList) ca).get(i));
                 }
             }
-        } catch (NoSuchFieldException localNoSuchFieldException1) {
-        } catch (IllegalArgumentException localIllegalArgumentException1) {
-        } catch (IllegalAccessException localIllegalAccessException1) {
+        } catch (NoSuchFieldException ignored) {
+        } catch (IllegalArgumentException ignored) {
+        } catch (IllegalAccessException ignored) {
         }
 
         if (claims != null) {
             long startTimeClaims = System.nanoTime();
-            this.sz = claims.size();
-            for (int i = 0; i < this.sz; i++) {
+            this.setSz(claims.size());
+            for (int i = 0; i < this.getSz(); i++) {
                 Claim claim = (Claim) claims.get(i);
                 if (this.uuidserver.booleanValue()) {
                     handleClaimUuid(i, claim);
@@ -1106,35 +1145,35 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 }
             }
             if (this.debug) {
-                estimatedTimeClaims = System.nanoTime() - startTimeClaims;
+                long estimatedTimeClaims = System.nanoTime() - startTimeClaims;
                 System.out.println("JDGP:   Async: Handle Parent Claims      : "
                         + TimeUnit.NANOSECONDS.toMillis(estimatedTimeClaims) + " ms");
             }
 
-            this.idx = this.sz;
+            this.setIdx(this.getSz());
             if (this.debug) {
                 startTimeSubclaims = System.nanoTime();
             }
-            for (int i = 0; i < this.sz; i++) {
+            for (int i = 0; i < this.getSz(); i++) {
                 Claim claim = (Claim) claims.get(i);
                 if ((claim.children != null) && (claim.children.size() > 0)) {
                     for (int l = 0; l < claim.children.size(); l++) {
                         if (this.uuidserver.booleanValue()) {
-                            handleClaimUuid(this.idx, (Claim) claim.children.get(l));
+                            handleClaimUuid(this.getIdx(), (Claim) claim.children.get(l));
                         } else {
-                            handleClaimName(this.idx, (Claim) claim.children.get(l));
+                            handleClaimName(this.getIdx(), (Claim) claim.children.get(l));
                         }
-                        this.idx += 1;
+                        this.setIdx(this.getIdx() + 1);
                     }
                 }
             }
             if (this.debug) {
-                estimatedTimeSubclaims = System.nanoTime() - startTimeSubclaims;
+                long estimatedTimeSubclaims = System.nanoTime() - startTimeSubclaims;
                 System.out.println("JDGP:   Async: Handle SubDivision Claims : "
                         + TimeUnit.NANOSECONDS.toMillis(estimatedTimeSubclaims) + " ms");
             }
         }
-        this.numOwners = claimsInfo.size();
+        this.setNumOwners(claimsInfo.size());
 
         new BukkitRunnable() {
             public void run() {
@@ -1144,7 +1183,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
                 if (JDynmapGriefPrevention.dynmap != null) {
 
-                    Map<String, AreaMarker> newmap = new HashMap(JDynmapGriefPrevention.this.idx + 1, 1.0F);
+                    HashMap newmap = new HashMap(JDynmapGriefPrevention.this.getIdx() + 1, 1.0F);
                     if (JDynmapGriefPrevention.this.useDynmap) {
                         newmap = JDynmapGriefPrevention.this.updateClaimsMap();
                     }
@@ -1177,22 +1216,22 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                                     Integer.parseInt(JDynmapGriefPrevention.nwsFillColor.substring(1), 16));
                             JDynmapGriefPrevention.newsmarker.setDescription(JDynmapGriefPrevention.newswindowTmpl);
                         }
-                    } catch (Exception localException) {
+                    } catch (Exception ignored) {
                     }
 
                     if ((JDynmapGriefPrevention.this.useDynmap) && (JDynmapGriefPrevention.this.showcountonlayer)
                             && (JDynmapGriefPrevention.this.usetwolayers)) {
                         JDynmapGriefPrevention.set.setMarkerSetLabel(jdgpMessages.getString("config.claims.usedname") + " ("
-                                + JDynmapGriefPrevention.this.countused + ")");
+                                + JDynmapGriefPrevention.this.getCountUsed() + ")");
                         JDynmapGriefPrevention.setunused.setMarkerSetLabel(jdgpMessages.getString("config.claims.unusedname") + " ("
-                                + JDynmapGriefPrevention.this.countunused + ")");
+                                + JDynmapGriefPrevention.this.getCountUnused() + ")");
                     }
                 }
 
                 if (JDynmapGriefPrevention.this.debug) {
-                    System.out.println("JDGP: " + JDynmapGriefPrevention.this.numOwners + " claims processed (Par:"
-                            + JDynmapGriefPrevention.this.sz + "/Sub:"
-                            + (JDynmapGriefPrevention.this.idx - JDynmapGriefPrevention.this.sz) + ").");
+                    System.out.println("JDGP: " + JDynmapGriefPrevention.this.getNumOwners() + " claims processed (Par:"
+                            + JDynmapGriefPrevention.this.getSz() + "/Sub:"
+                            + (JDynmapGriefPrevention.this.getIdx() - JDynmapGriefPrevention.this.getSz()) + ").");
                     System.out.println("JDGP: ---------------------------------------------");
                 }
                 if (JDynmapGriefPrevention.this.updconslog) {
@@ -1203,7 +1242,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }.runTaskLater(this, 20L);
 
         if (this.debug) {
-            estimatedTimeUC = System.nanoTime() - startTimeUC;
+            long estimatedTimeUC = System.nanoTime() - startTimeUC;
             System.out.println("JDGP:   Async: Update Claims Time Total  : "
                     + TimeUnit.NANOSECONDS.toMillis(estimatedTimeUC) + " ms");
         }
@@ -1212,17 +1251,17 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             System.out.println("JDGP: UpdateClaims Stop");
             System.out.println("JDGP: --------------------------------");
             System.out.println("JDGP: Number of OfflinePlayers: " + offlinePlayers.length);
-            System.out.println("JDGP: Number of Owners        : " + this.numOwners);
-            System.out.println("JDGP: Number of Builders      : " + this.numBuilders);
-            System.out.println("JDGP: # of Builders Days Calc : " + this.numBuildersCalcDays);
-            System.out.println("JDGP: Number of Containers    : " + this.numContainers);
-            System.out.println("JDGP: Number of Accessors     : " + this.numAccessors);
-            System.out.println("JDGP: Number of Managers      : " + this.numManagers);
+            System.out.println("JDGP: Number of Owners        : " + this.getNumOwners());
+            System.out.println("JDGP: Number of Builders      : " + this.getNumBuilders());
+            System.out.println("JDGP: # of Builders Days Calc : " + this.getNumBuildersCalcDays());
+            System.out.println("JDGP: Number of Containers    : " + this.getNumContainers());
+            System.out.println("JDGP: Number of Accessors     : " + this.getNumAccessors());
+            System.out.println("JDGP: Number of Managers      : " + this.getNumManagers());
             System.out.println("JDGP: Config absenceDayLimit  : " + absenceDayLimit);
             System.out.println("JDGP: --------------------------------");
         }
 
-        BukkitTask task = new GriefPreventionUpdate().runTaskLaterAsynchronously(this, this.updperiod);
+        BukkitTask task = new GriefPreventionUpdate().runTaskLaterAsynchronously(this, updperiod);
         taskid = task.getTaskId();
     }
 
@@ -1242,7 +1281,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
 
         try {
-            File langFile = null;
+            File langFile;
             langFile = new File(getDataFolder() + "/lang/", "Messages_en.properties");
             if (!langFile.exists()) {
                 langFile.getParentFile().mkdirs();
@@ -1253,7 +1292,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
 
         try {
-            File langFile = null;
+            File langFile;
             langFile = new File(getDataFolder() + "/lang/", "Messages_de.properties");
             if (!langFile.exists()) {
                 langFile.getParentFile().mkdirs();
@@ -1264,7 +1303,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
 
         try {
-            File langFile = null;
+            File langFile;
             langFile = new File(getDataFolder() + "/lang/", "Messages_ru.properties");
             if (!langFile.exists()) {
                 langFile.getParentFile().mkdirs();
@@ -1298,7 +1337,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             return;
         }
 
-        String dynVersion = "";
+        String dynVersion;
         if (dynmap != null) {
             PluginDescriptionFile dynpdf = dynmap.getDescription();
             dynVersion = dynpdf.getVersion();
@@ -1335,28 +1374,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             activate();
         }
 
-        this.versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
+        String versionString = (mcVersion + "+" + dynVersion + "+" + gpVersion);
 
-        if (this.pluginMetrics) {
-            final JMetrics jmetrics = new JMetrics(this);
-            if (jmetrics.isOptOutOk()) {
-
-                new BukkitRunnable() {
-                    public void run() {
-                        jmetrics.send();
-                    }
-                }.runTaskLaterAsynchronously(this, 6000L);
-            }
-        }
-
-        if (this.updateCheck) {
-
-            new BukkitRunnable() {
-                public void run() {
-                    JDynmapGriefPrevention.this.checkForUpdate();
-                }
-            }.runTaskLaterAsynchronously(this, 3000L);
-        }
     }
 
     private void activate() {
@@ -1414,8 +1433,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
-            if (this.minzoom > 0)
-                set.setMinZoom(this.minzoom);
+            if (minzoom > 0)
+                set.setMinZoom(minzoom);
             set.setLayerPriority(layerPrio);
             set.setHideByDefault(hideByDefault);
 
@@ -1429,14 +1448,14 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     console(jdgpMessages.getString("enable.dyn.marker.create"));
                     return;
                 }
-                if (this.minzoom > 0)
-                    setunused.setMinZoom(this.minzoom);
+                if (minzoom > 0)
+                    setunused.setMinZoom(minzoom);
                 setunused.setLayerPriority(layerPrioUnused);
                 setunused.setHideByDefault(hideByDefaultUnused);
             }
         }
 
-        defstyle = new AreaStyle(cfg, "regionstyle");
+        defstyle = new AreaStyle(cfg);
         ownerstyle = new HashMap();
         ConfigurationSection sect = cfg.getConfigurationSection("ownerstyle");
         if (sect != null) {
@@ -1455,9 +1474,9 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             hidden = new HashSet(hid);
         }
 
-        if (this.per < 15)
-            this.per = 15;
-        this.updperiod = (this.per * 20);
+        if (per < 15)
+            per = 15;
+        updperiod = (per * 20);
         stop = false;
 
         new GriefPreventionUpdate().runTaskLaterAsynchronously(this, 40L);
@@ -1493,7 +1512,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
     }
 
-    public int getDayDifference(long timeStamp) {
+    private int getDayDifference(long timeStamp) {
         if (timeStamp != 0L) {
             Date logoutDate = new Date(Long.valueOf(timeStamp).longValue());
             Date now = new Date();
@@ -1504,18 +1523,18 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         return 0;
     }
 
-    public OfflinePlayer getUuidOfflinePlayer(String uuidString) {
+    private OfflinePlayer getUuidOfflinePlayer(String uuidString) {
         try {
             return (OfflinePlayer) hm_offlinePlayers.get(uuidString);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }
 
-    public OfflinePlayer getNameOfflinePlayer(String playername) {
+    private OfflinePlayer getNameOfflinePlayer(String playername) {
         try {
             return (OfflinePlayer) hm_offlinePlayers.get(playername.toLowerCase());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }
@@ -1535,67 +1554,25 @@ public class JDynmapGriefPrevention extends JavaPlugin {
             if (fos != null) {
                 try {
                     fos.close();
-                } catch (Exception localException) {
+                } catch (Exception ignored) {
                 }
             }
             try {
                 inStream.close();
-            } catch (Exception localException1) {
+            } catch (Exception ignored) {
             }
         } finally {
             if (fos != null) {
                 try {
                     fos.close();
-                } catch (Exception localException2) {
+                } catch (Exception ignored) {
                 }
             }
             try {
                 inStream.close();
-            } catch (Exception localException3) {
+            } catch (Exception ignored) {
             }
         }
-    }
-
-    public Metrics getMetrics() {
-        return this.metrics;
-    }
-
-    public void setMetrics(Metrics metrics) {
-        this.metrics = metrics;
-    }
-
-    private void checkForUpdate() {
-        console(jdgpMessages.getString("updater.checkmsg"));
-        UpdateCheck updatechecker = new UpdateCheck(this, "818", false);
-        UpdateCheck.UpdateResult checkresult = updatechecker.getResult();
-        switch (checkresult) {
-            case FAIL_NOVERSION:
-                console(jdgpMessages.getString("updater.connection_failed"));
-                break;
-
-            case NO_UPDATE:
-                console(jdgpMessages.getString("updater.connection_failed"));
-                break;
-
-            case BAD_RESOURCEID:
-                console(jdgpMessages.getString("updater.no_new_version"));
-                break;
-
-            case UPDATE_AVAILABLE:
-                checkedPluginVersion = updatechecker.getVersion();
-
-                text = MessageFormat.format(jdgpMessages.getString("updater.new_version"),
-                        new Object[]{checkedPluginVersion});
-                console(text);
-
-                console(jdgpMessages.getString("updater.url.color") + "http://goo.gl/5lI8Mh");
-                break;
-            case DISABLED:
-            case FAIL_SPIGOT:
-            default:
-                console(checkresult.toString());
-        }
-
     }
 
     private void readConfigOptions() {
@@ -1606,7 +1583,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         infowindowTmpl = cfg.getString("infowindow", DEF_INFOWINDOW);
         admininfowindowTmpl = cfg.getString("admininfowindow", DEF_ADMININFOWINDOW);
         newswindowTmpl = cfg.getString("newswindow", DEF_NEWSWINDOW);
-        this.per = cfg.getInt("update.period", 300);
+        per = cfg.getInt("update.period", 300);
         this.updconslog = cfg.getBoolean("update.consolelog", true);
         absenceDayLimit = cfg.getInt("absenceDayLimit", 40);
         allAbsentStrokeColor = cfg.getString("allAbsent.strokeColor", "#669900");
@@ -1648,11 +1625,11 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         nwsStrokeWeight = cfg.getInt("newswindowstyle.strokeWeight", 3);
         nwsFillColor = cfg.getString("newswindowstyle.fillColor", "#FFFF33");
         nwsFillOpacity = cfg.getDouble("newswindowstyle.fillOpacity", 0.8D);
-        this.minzoom = cfg.getInt("layer.minzoom", 0);
+        minzoom = cfg.getInt("layer.minzoom", 0);
     }
 
     private void setLocale() {
-        jdgpLocale = new Locale(this.cfglocale);
+        Locale jdgpLocale = new Locale(this.cfglocale);
         Locale.setDefault(jdgpLocale);
         try {
             File file = new File(getDataFolder() + "/lang/");
@@ -1701,7 +1678,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
         }
     }
 
-    private boolean isOfflinePlayer(String name) {
+    private boolean isOfflinePlayer() {
         for (Map.Entry<String, OfflinePlayer> entry : hm_offlinePlayers.entrySet()) {
             if (mapPlayerName.equalsIgnoreCase("public")) {
                 return true;
@@ -1800,7 +1777,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     Visualization.Apply(p, visualization);
                 }
             }.runTaskLaterAsynchronously(this, 60L);
-        } catch (Exception localException) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -1817,8 +1794,8 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                 }
                 JDynmapGriefPrevention.mapPlayerAlreadyRunning = true;
 
-                boolean check = false;
-                check = JDynmapGriefPrevention.this.isOfflinePlayer(JDynmapGriefPrevention.mapPlayerName);
+                boolean check;
+                check = JDynmapGriefPrevention.this.isOfflinePlayer();
                 if (!check) {
                     msender.sendMessage(JDynmapGriefPrevention.jdgpMessages.getString("command.claims.notfound"));
                     JDynmapGriefPrevention.mapPlayerAlreadyRunning = false;
@@ -1841,7 +1818,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     return;
                 }
 
-                Map<String, AreaMarker> newmap = new HashMap(100, 1.0F);
+                HashMap newmap;
 
                 if (JDynmapGriefPrevention.this.mapUsePlayerName) {
                     JDynmapGriefPrevention.this.createPlayerLayer(JDynmapGriefPrevention.mapPlayerName, size);
@@ -1876,13 +1853,10 @@ public class JDynmapGriefPrevention extends JavaPlugin {
 
     private boolean isStringInteger(String str) {
         String pattern = "-?[0-9]+";
-        if (Pattern.matches(pattern, str)) {
-            return true;
-        }
-        return false;
+        return Pattern.matches(pattern, str);
     }
 
-    public static boolean isStringNumber(String string) {
+    private static boolean isStringNumber(String string) {
         try {
             Long.parseLong(string);
         } catch (Exception e) {
@@ -1952,7 +1926,7 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     activate();
                     sender.sendMessage(jdgpMessages.getString("command.reload.success1"));
                     text = MessageFormat.format(jdgpMessages.getString("command.reload.success2"),
-                            new Object[]{Long.valueOf(this.updperiod / 20L)});
+                            new Object[]{Long.valueOf(updperiod / 20L)});
                     sender.sendMessage(text);
                     return true;
                 }
@@ -1997,21 +1971,21 @@ public class JDynmapGriefPrevention extends JavaPlugin {
                     sender.sendMessage(jdgpMessages.getString("command.stats.title"));
                     sender.sendMessage(jdgpMessages.getString("command.stats.separator"));
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.claims_owner"),
-                            new Object[]{String.valueOf(this.numOwners)});
+                            new Object[]{String.valueOf(this.getNumOwners())});
                     sender.sendMessage(text);
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.trusted"),
-                            new Object[]{String.valueOf(this.numBuilders), String.valueOf(this.numContainers),
-                                    String.valueOf(this.numAccessors), String.valueOf(this.numManagers)});
+                            new Object[]{String.valueOf(this.getNumBuilders()), String.valueOf(this.getNumContainers()),
+                                    String.valueOf(this.getNumAccessors()), String.valueOf(this.getNumManagers())});
                     sender.sendMessage(text);
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.parent_subdiv"),
-                            new Object[]{String.valueOf(this.sz), String.valueOf(this.idx - this.sz)});
+                            new Object[]{String.valueOf(this.getSz()), String.valueOf(this.getIdx() - this.getSz())});
                     sender.sendMessage(text);
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.used"),
-                            new Object[]{String.valueOf(this.countused), String.valueOf(this.countadmin),
-                                    String.valueOf(this.countnormal), String.valueOf(this.countbuilder)});
+                            new Object[]{String.valueOf(this.getCountUsed()), String.valueOf(this.getCountadmin()),
+                                    String.valueOf(this.getCountNormal()), String.valueOf(this.getCountbuilder())});
                     sender.sendMessage(text);
                     text = MessageFormat.format(jdgpMessages.getString("command.stats.unused"),
-                            new Object[]{String.valueOf(this.countunused)});
+                            new Object[]{String.valueOf(this.getCountUnused())});
                     sender.sendMessage(text);
                     sender.sendMessage(jdgpMessages.getString("command.stats.separator"));
                     return true;

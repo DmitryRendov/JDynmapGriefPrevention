@@ -1,10 +1,10 @@
-package jahan.khan.jdynmapgriefprevention;
+package jahan.khan.JDynmapGriefPrevention;
 
-public class StringSearch {
+class StringSearch {
     private final int BASE;
 
-    private int[] occurrence;
-    private String pattern;
+    private final int[] occurrence;
+    private final String pattern;
 
     public StringSearch(String pattern) {
         this.BASE = 256;
